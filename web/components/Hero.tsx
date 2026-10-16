@@ -60,7 +60,6 @@ export default function Hero({
         </div>
 
         <div className="hero-visual" aria-hidden="true">
-          <div className="hero-malha" />
           <div className="hero-contagem">
             {dias != null && dias > 0 ? (
               <>
