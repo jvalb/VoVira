@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { fInt, fPct } from "@/lib/format";
+import { formatarRankingWhatsApp } from "@/lib/share";
+import { ModoRanking } from "@/lib/ranking";
 
-type Modo = "mobilizacao" | "persuasao" | "recuperacao" | "equilibrio";
+type Modo = ModoRanking;
 
 interface Linha {
   codigo: string;
@@ -37,6 +39,7 @@ export default function Ranking({ onSelect }: { onSelect: (codigo: string) => vo
   const [uf, setUf] = useState("");
   const [r, setR] = useState<Resp | null>(null);
   const [erro, setErro] = useState<string | null>(null);
+  const [copiado, setCopiado] = useState(false);
 
   useEffect(() => {
     let vivo = true;
@@ -50,6 +53,34 @@ export default function Ranking({ onSelect }: { onSelect: (codigo: string) => vo
       vivo = false;
     };
   }, [modo, uf]);
+
+  const copiarRanking = () => {
+    if (!r || r.linhas.length === 0) return;
+    const url = typeof window !== "undefined" ? window.location.origin : "https://vovira.app";
+    const txt = formatarRankingWhatsApp(r.linhas, modo, uf, url);
+    navigator.clipboard.writeText(txt).then(() => {
+      setCopiado(true);
+      setTimeout(() => setCopiado(false), 2500);
+    });
+  };
+
+  const compartilharWhatsApp = () => {
+    if (!r || r.linhas.length === 0) return;
+    const url = typeof window !== "undefined" ? window.location.origin : "https://vovira.app";
+    const txt = formatarRankingWhatsApp(r.linhas, modo, uf, url);
+    if (typeof navigator !== "undefined" && navigator.share) {
+      navigator
+        .share({
+          title: `VoVira — Cidades Prioritárias (${r.titulo})`,
+          text: txt,
+        })
+        .catch(() => {
+          window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(txt)}`, "_blank");
+        });
+    } else {
+      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(txt)}`, "_blank");
+    }
+  };
 
   return (
     <div className="painel-conteudo">
@@ -79,6 +110,26 @@ export default function Ranking({ onSelect }: { onSelect: (codigo: string) => vo
         <>
           <h3>{r.titulo}</h3>
           <p className="nota">{r.descricao}</p>
+          {r.linhas.length > 0 && (
+            <div className="acoes-painel" role="toolbar" aria-label="Ações do ranking">
+              <button
+                type="button"
+                className={`btn-acao ${copiado ? "btn-sucesso" : ""}`}
+                onClick={copiarRanking}
+                title="Copiar lista de cidades prioritárias formatada para WhatsApp"
+              >
+                {copiado ? "✓ Lista Copiada!" : "📋 Copiar Lista (WhatsApp)"}
+              </button>
+              <button
+                type="button"
+                className="btn-acao btn-whats"
+                onClick={compartilharWhatsApp}
+                title="Compartilhar lista de cidades no WhatsApp"
+              >
+                💬 WhatsApp
+              </button>
+            </div>
+          )}
           <ol className="rank">
             {r.linhas.map((l) => (
               <li key={l.codigo}>

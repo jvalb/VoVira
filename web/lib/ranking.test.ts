@@ -1,14 +1,21 @@
 import { describe, expect, it } from "vitest";
 import { ranking } from "./ranking";
-import { Municipio } from "./types";
+import { Indicators, Municipio } from "./types";
+
+const emptyInd: Indicators = {
+  esgoto_adequado: null,
+  agua_rede: null,
+  lixo_coletado: null,
+  internet: null,
+  alfabetizacao: null,
+};
 
 const mockMuns: Record<string, Municipio> = {
   "1": {
-    c: "1",
     n: "Cidade A (Lula lidera folgado)",
     uf: "SP",
     pop: 100000,
-    ind: {} as any,
+    ind: emptyInd,
     e: {
       "2026t1": {
         aptos: 100000,
@@ -31,11 +38,10 @@ const mockMuns: Record<string, Municipio> = {
     },
   },
   "2": {
-    c: "2",
     n: "Cidade B (Oponente lidera, muitos outros)",
     uf: "RJ",
     pop: 80000,
-    ind: {} as any,
+    ind: emptyInd,
     e: {
       "2026t1": {
         aptos: 80000,
@@ -49,11 +55,10 @@ const mockMuns: Record<string, Municipio> = {
     },
   },
   "3": {
-    c: "3",
     n: "Cidade C (Super equilibrada)",
     uf: "SP",
     pop: 50000,
-    ind: {} as any,
+    ind: emptyInd,
     e: {
       "2026t1": {
         aptos: 40000,
@@ -67,11 +72,10 @@ const mockMuns: Record<string, Municipio> = {
     },
   },
   "4": {
-    c: "4",
     n: "Cidade Pequena (Menos de 20k válidos)",
     uf: "SP",
     pop: 8000,
-    ind: {} as any,
+    ind: emptyInd,
     e: {
       "2026t1": {
         aptos: 6000,

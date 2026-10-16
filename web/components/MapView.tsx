@@ -73,15 +73,21 @@ export default function MapView({ resumo, eleicao, metric, selecionado, foco, on
     m.addControl(new NavigationControl({ showCompass: false }), "top-left");
 
     m.on("load", async () => {
+      console.log("[MAP] m.on('load') triggered!");
       try {
+        console.log("[MAP] Fetching /data/malha.geojson...");
         const r = await fetch("/data/malha.geojson");
+        console.log("[MAP] Fetch response status:", r.status);
         if (!r.ok) throw new Error(`malha: HTTP ${r.status}`);
         const g = (await r.json()) as Geo;
+        console.log("[MAP] GeoJSON parsed, features count:", g.features?.length);
         geo.current = g;
         m.addSource("mun", { type: "geojson", data: g, promoteId: "c" });
+        console.log("[MAP] addSource('mun') succeeded");
         m.addLayer({ id: "mun-fill", type: "fill", source: "mun", paint: { "fill-color": colorExpr(metricRef.current.metric), "fill-opacity": 0.95 } });
         m.addLayer({ id: "mun-line", type: "line", source: "mun", paint: { "line-color": "#ffffff", "line-width": ["interpolate", ["linear"], ["zoom"], 3, 0, 6, 0.2, 9, 0.6] } });
         m.addLayer({ id: "mun-sel", type: "line", source: "mun", filter: ["==", ["get", "c"], ""], paint: { "line-color": "#111", "line-width": 2.5 } });
+        console.log("[MAP] Layers added");
 
         m.on("mousemove", "mun-fill", (e: MapLayerMouseEvent) => {
           const f = e.features?.[0];
@@ -106,11 +112,19 @@ export default function MapView({ resumo, eleicao, metric, selecionado, foco, on
           if (f) onSelectRef.current(String(f.properties?.c ?? f.id));
         });
         setPronto(true);
+        console.log("[MAP] setPronto(true) called");
       } catch (err) {
+        console.error("[MAP] Erro ao carregar malha:", err);
         setErro(err instanceof Error ? err.message : "Falha ao carregar o mapa");
       }
     });
+    const ro = new ResizeObserver(() => {
+      m.resize();
+    });
+    ro.observe(el.current);
+
     return () => {
+      ro.disconnect();
       m.remove();
       map.current = null;
     };
@@ -144,7 +158,13 @@ export default function MapView({ resumo, eleicao, metric, selecionado, foco, on
 
   return (
     <div className="mapa-wrap">
-      <div ref={el} className="mapa" role="img" aria-label="Mapa coroplético dos municípios do Brasil. Use a busca ou a aba Onde atuar para navegar por teclado." />
+      <div
+        ref={el}
+        className="mapa"
+        style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, width: "100%", height: "100%" }}
+        role="img"
+        aria-label="Mapa coroplético dos municípios do Brasil. Use a busca ou a aba Onde atuar para navegar por teclado."
+      />
       {!pronto && !erro && <div className="mapa-msg">Carregando mapa…</div>}
       {erro && <div className="mapa-msg erro">Não foi possível carregar o mapa: {erro}</div>}
       {tip && (

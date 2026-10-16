@@ -71,15 +71,26 @@ const mockMeta: Meta = {
       },
     },
   },
-  tot2026: "2026-10-04T22:00:00-03:00",
-  hashes: {},
-  versaoPipeline: "1.0.0",
+  gerado_em_utc: "2026-10-04T22:00:00Z",
+  eleicoes: {
+    "2022t1": "1º turno 2022",
+    "2022t2": "2º turno 2022",
+    "2026t1": "1º turno 2026",
+  },
+  tse_arquivos: {
+    "2026t1": { geracao: "2026-10-04", ultima_totalizacao: "2026-10-04T22:00:00-03:00" },
+    "2022t1": { geracao: "2022-10-02", ultima_totalizacao: "2022-10-02" },
+    "2022t2": { geracao: "2022-10-30", ultima_totalizacao: "2022-10-30" },
+  },
+  exterior: {},
+  fontes: {},
+  formulas: {},
+  validacoes: {},
 };
 
 describe("gerarInsights", () => {
   it("gera insight de liderança quando Lula está à frente", () => {
     const mun: Municipio = {
-      c: "3550308",
       n: "São Paulo",
       uf: "SP",
       pop: 11451000,
@@ -112,7 +123,6 @@ describe("gerarInsights", () => {
 
   it("gera insight de virada necessária quando Lula está atrás", () => {
     const mun: Municipio = {
-      c: "3550308",
       n: "São Paulo",
       uf: "SP",
       pop: 11451000,
@@ -145,7 +155,6 @@ describe("gerarInsights", () => {
 
   it("gera insight de abstenção alta quando supera a média nacional em 1.5 p.p.", () => {
     const mun: Municipio = {
-      c: "3550308",
       n: "Cidade com Alta Abstenção",
       uf: "SP",
       pop: 100000,
@@ -178,7 +187,6 @@ describe("gerarInsights", () => {
 
   it("gera insights de necessidade local quando indicadores do Censo 2022 estão abaixo da média", () => {
     const mun: Municipio = {
-      c: "3550308",
       n: "Cidade com Déficit de Saneamento",
       uf: "SP",
       pop: 50000,

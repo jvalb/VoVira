@@ -56,8 +56,14 @@ select, input[type="search"] { font: inherit; padding: .4rem .5rem; border: 1px 
 .destaque { background: #fff8e6; border: 1px solid #f0d78a; padding: .5rem .7rem; border-radius: 8px; font-size: .9rem; }
 
 /* mapa */
-.mapa-wrap { position: relative; flex: 1; min-height: 320px; border: 1px solid var(--borda); border-radius: 10px; overflow: hidden; }
-.mapa { position: absolute; inset: 0; }
+.mapa-wrap { position: relative; flex: 1; min-height: 400px; height: 100%; border: 1px solid var(--borda); border-radius: 10px; overflow: hidden; }
+.mapa-wrap .mapa,
+.mapa-wrap .maplibregl-map {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+}
 .mapa-msg { position: absolute; inset: 0; display: grid; place-items: center; color: var(--suave); pointer-events: none; }
 .mapa-msg.erro { color: #9b1c1c; }
 .tip { position: absolute; z-index: 5; background: #111; color: #fff; padding: .3rem .5rem; border-radius: 6px; font-size: .8rem; pointer-events: none; max-width: 280px; }

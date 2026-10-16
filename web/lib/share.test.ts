@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { formatarRoteiroWhatsApp, DetalheCompartilhavel } from "./share";
+import { formatarRoteiroWhatsApp, formatarRoteiroNacional, formatarRankingWhatsApp, DetalheCompartilhavel } from "./share";
+import { LinhaRanking } from "./ranking";
 
 const mockDetalheTrailing: DetalheCompartilhavel = {
   codigo: "3550308",
@@ -110,3 +111,48 @@ describe("formatarRoteiroWhatsApp", () => {
     expect(txt).toContain("https://vovira.app/?m=2927408");
   });
 });
+
+describe("formatarRoteiroNacional", () => {
+  it("formata panorama nacional com metas de virada no Brasil", () => {
+    const aggNac = {
+      aptos: 156000000,
+      comp: 123000000,
+      abst: 33000000,
+      brancos: 3000000,
+      nulos: 4000000,
+      validos: 116000000,
+      v: { "13": 56000000, "22": 58000000, "70": 2000000 },
+    };
+
+    const txt = formatarRoteiroNacional(aggNac, { totalizacao: "04/10" });
+    expect(txt).toContain("📋 *VoVira — Guia de Mobilização Nacional (2º Turno 2026)*");
+    expect(txt).toContain("Lula: *48,28%* (56.000.000 votos)");
+    expect(txt).toContain("Votos novos necessários: *+2.000.001 votos*");
+    expect(txt).toContain("33,4 milhões de eleitores");
+    expect(txt).toContain("Lei 9.504/97");
+  });
+});
+
+describe("formatarRankingWhatsApp", () => {
+  it("formata lista de cidades prioritárias para envio em grupos", () => {
+    const linhas: LinhaRanking[] = [
+      {
+        codigo: "3550308",
+        nome: "São Paulo",
+        uf: "SP",
+        valor: 150000,
+        unidade: "votos líquidos",
+        lulaPct: 48.5,
+        oponentePct: 45.2,
+        margem: 120000,
+        validos: 6000000,
+      },
+    ];
+
+    const txt = formatarRankingWhatsApp(linhas, "mobilizacao", "SP");
+    expect(txt).toContain("📋 *VoVira — Cidades Prioritárias para Atuação*");
+    expect(txt).toContain("Estratégia:* Maior ganho por mobilização (SP)");
+    expect(txt).toContain("1. *São Paulo / SP* — 150.000 votos líquidos (Lula: 48,50% vs Opo: 45,20%)");
+  });
+});
+
