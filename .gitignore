@@ -1,0 +1,29 @@
+# Node & Next.js
+node_modules/
+.next/
+web/node_modules/
+web/.next/
+web/tsconfig.tsbuildinfo
+npm-debug.log*
+
+# Python & Pipeline Work Directories
+__pycache__/
+*.py[cod]
+pipeline/__pycache__/
+data/work/
+data/raw/*
+!data/raw/MANIFEST.json
+!data/raw/SHA256SUMS.txt
+!data/certs/ibge-intermediate.pem
+
+# Scratch & Logs
+scratch/
+.system_generated/
+*.log
+
+# OS & IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp

@@ -1,0 +1,604 @@
+{
+ "gerado_em_utc": "2026-10-16T01:55:27.056990+00:00",
+ "eleicoes": {
+  "2022t1": "Presidente — 1º turno 2022 (02/10/2022)",
+  "2022t2": "Presidente — 2º turno 2022 (30/10/2022)",
+  "2026t1": "Presidente — 1º turno 2026 (04/10/2026)"
+ },
+ "candidatos": {
+  "2022t1": {
+   "21": {
+    "nome": "SOFIA MANZANO",
+    "partido": "PCB"
+   },
+   "22": {
+    "nome": "JAIR BOLSONARO",
+    "partido": "PL"
+   },
+   "15": {
+    "nome": "SIMONE TEBET",
+    "partido": "MDB"
+   },
+   "44": {
+    "nome": "SORAYA THRONICKE",
+    "partido": "UNIÃO"
+   },
+   "16": {
+    "nome": "VERA",
+    "partido": "PSTU"
+   },
+   "27": {
+    "nome": "CONSTITUINTE EYMAEL",
+    "partido": "DC"
+   },
+   "12": {
+    "nome": "CIRO GOMES",
+    "partido": "PDT"
+   },
+   "14": {
+    "nome": "PADRE KELMON",
+    "partido": "PTB"
+   },
+   "13": {
+    "nome": "LULA",
+    "partido": "PT"
+   },
+   "30": {
+    "nome": "FELIPE D AVILA",
+    "partido": "NOVO"
+   },
+   "80": {
+    "nome": "LÉO PÉRICLES",
+    "partido": "UP"
+   }
+  },
+  "2022t2": {
+   "22": {
+    "nome": "JAIR BOLSONARO",
+    "partido": "PL"
+   },
+   "13": {
+    "nome": "LULA",
+    "partido": "PT"
+   }
+  },
+  "2026t1": {
+   "80": {
+    "nome": "SAMARA",
+    "partido": "UP"
+   },
+   "70": {
+    "nome": "ESCRITOR AUGUSTO CURY",
+    "partido": "AVANTE"
+   },
+   "16": {
+    "nome": "HERTZ DIAS",
+    "partido": "PSTU"
+   },
+   "35": {
+    "nome": "VETERINÁRIO WILSON GRASSI",
+    "partido": "DEMOCRATA"
+   },
+   "27": {
+    "nome": "CLARIANA BARAO",
+    "partido": "DC"
+   },
+   "13": {
+    "nome": "LULA",
+    "partido": "PT"
+   },
+   "14": {
+    "nome": "RENAN SANTOS",
+    "partido": "MISSÃO"
+   },
+   "55": {
+    "nome": "RONALDO CAIADO",
+    "partido": "PSD"
+   },
+   "30": {
+    "nome": "ZEMA",
+    "partido": "NOVO"
+   },
+   "29": {
+    "nome": "RUI COSTA PIMENTA",
+    "partido": "PCO"
+   },
+   "21": {
+    "nome": "EDMILSON COSTA",
+    "partido": "PCB"
+   },
+   "22": {
+    "nome": "FLAVIO BOLSONARO",
+    "partido": "PL"
+   }
+  }
+ },
+ "tse_arquivos": {
+  "2022t1": {
+   "geracao": "15/10/2026 03:16:32",
+   "ultima_totalizacao": "02/10/2022 21:25:51"
+  },
+  "2022t2": {
+   "geracao": "15/10/2026 03:16:32",
+   "ultima_totalizacao": "30/10/2022 19:21:11"
+  },
+  "2026t1": {
+   "geracao": "15/10/2026 19:32:14",
+   "ultima_totalizacao": "04/10/2026 17:20:11"
+  }
+ },
+ "nacional": {
+  "2022t1": {
+   "aptos": 156454011,
+   "comp": 123682372,
+   "abst": 32770982,
+   "brancos": 1964779,
+   "nulos": 3487874,
+   "validos": 118229719,
+   "v": {
+    "21": 45620,
+    "22": 51072345,
+    "44": 600955,
+    "27": 16604,
+    "15": 4915423,
+    "14": 81129,
+    "12": 3599287,
+    "16": 25625,
+    "30": 559708,
+    "80": 53519,
+    "13": 57259504
+   }
+  },
+  "2022t2": {
+   "aptos": 156454011,
+   "comp": 124252796,
+   "abst": 32200558,
+   "brancos": 1769678,
+   "nulos": 3930765,
+   "validos": 118552353,
+   "v": {
+    "22": 58206354,
+    "13": 60345999
+   }
+  },
+  "2026t1": {
+   "aptos": 158745502,
+   "comp": 125275835,
+   "abst": 33469244,
+   "brancos": 2300798,
+   "nulos": 3674249,
+   "validos": 119300788,
+   "v": {
+    "80": 122911,
+    "70": 3448569,
+    "27": 40043,
+    "35": 16881,
+    "16": 43103,
+    "14": 2675887,
+    "55": 2605148,
+    "13": 53879538,
+    "29": 15024,
+    "21": 22693,
+    "22": 56104503,
+    "30": 326488
+   }
+  }
+ },
+ "referencias": {
+  "BR": {
+   "pop": 203080756,
+   "ind": {
+    "alfabetizacao": 93.0,
+    "esgoto_adequado": 64.69,
+    "agua_rede": 83.88,
+    "lixo_coletado": 91.71,
+    "internet": 86.35
+   }
+  },
+  "UF": {
+   "RO": {
+    "pop": 1581196,
+    "ind": {
+     "alfabetizacao": 93.55,
+     "esgoto_adequado": 13.63,
+     "agua_rede": 46.15,
+     "lixo_coletado": 79.52,
+     "internet": 88.91
+    }
+   },
+   "AC": {
+    "pop": 830018,
+    "ind": {
+     "alfabetizacao": 87.87,
+     "esgoto_adequado": 36.73,
+     "agua_rede": 52.56,
+     "lixo_coletado": 78.36,
+     "internet": 74.79
+    }
+   },
+   "AM": {
+    "pop": 3941613,
+    "ind": {
+     "alfabetizacao": 93.06,
+     "esgoto_adequado": 33.44,
+     "agua_rede": 66.08,
+     "lixo_coletado": 82.78,
+     "internet": 77.99
+    }
+   },
+   "RR": {
+    "pop": 636707,
+    "ind": {
+     "alfabetizacao": 93.08,
+     "esgoto_adequado": 44.98,
+     "agua_rede": 81.32,
+     "lixo_coletado": 80.4,
+     "internet": 81.26
+    }
+   },
+   "PA": {
+    "pop": 8120131,
+    "ind": {
+     "alfabetizacao": 91.24,
+     "esgoto_adequado": 19.99,
+     "agua_rede": 48.9,
+     "lixo_coletado": 78.08,
+     "internet": 77.63
+    }
+   },
+   "AP": {
+    "pop": 733759,
+    "ind": {
+     "alfabetizacao": 93.53,
+     "esgoto_adequado": 12.06,
+     "agua_rede": 43.38,
+     "lixo_coletado": 90.82,
+     "internet": 85.27
+    }
+   },
+   "TO": {
+    "pop": 1511460,
+    "ind": {
+     "alfabetizacao": 90.94,
+     "esgoto_adequado": 29.56,
+     "agua_rede": 81.74,
+     "lixo_coletado": 85.18,
+     "internet": 83.64
+    }
+   },
+   "MA": {
+    "pop": 6776699,
+    "ind": {
+     "alfabetizacao": 84.95,
+     "esgoto_adequado": 18.16,
+     "agua_rede": 66.15,
+     "lixo_coletado": 71.43,
+     "internet": 77.09
+    }
+   },
+   "PI": {
+    "pop": 3271199,
+    "ind": {
+     "alfabetizacao": 82.77,
+     "esgoto_adequado": 18.53,
+     "agua_rede": 77.07,
+     "lixo_coletado": 73.67,
+     "internet": 78.25
+    }
+   },
+   "CE": {
+    "pop": 8794957,
+    "ind": {
+     "alfabetizacao": 85.88,
+     "esgoto_adequado": 41.17,
+     "agua_rede": 79.21,
+     "lixo_coletado": 85.48,
+     "internet": 82.68
+    }
+   },
+   "RN": {
+    "pop": 3302729,
+    "ind": {
+     "alfabetizacao": 86.14,
+     "esgoto_adequado": 32.62,
+     "agua_rede": 84.94,
+     "lixo_coletado": 90.84,
+     "internet": 84.44
+    }
+   },
+   "PB": {
+    "pop": 3974687,
+    "ind": {
+     "alfabetizacao": 84.04,
+     "esgoto_adequado": 49.08,
+     "agua_rede": 74.49,
+     "lixo_coletado": 84.61,
+     "internet": 82.43
+    }
+   },
+   "PE": {
+    "pop": 9058931,
+    "ind": {
+     "alfabetizacao": 86.59,
+     "esgoto_adequado": 53.54,
+     "agua_rede": 71.3,
+     "lixo_coletado": 85.57,
+     "internet": 82.67
+    }
+   },
+   "AL": {
+    "pop": 3127683,
+    "ind": {
+     "alfabetizacao": 82.34,
+     "esgoto_adequado": 34.08,
+     "agua_rede": 68.14,
+     "lixo_coletado": 87.22,
+     "internet": 81.51
+    }
+   },
+   "SE": {
+    "pop": 2210004,
+    "ind": {
+     "alfabetizacao": 86.19,
+     "esgoto_adequado": 54.16,
+     "agua_rede": 85.4,
+     "lixo_coletado": 91.52,
+     "internet": 81.32
+    }
+   },
+   "BA": {
+    "pop": 14141626,
+    "ind": {
+     "alfabetizacao": 87.4,
+     "esgoto_adequado": 53.87,
+     "agua_rede": 83.12,
+     "lixo_coletado": 83.37,
+     "internet": 80.94
+    }
+   },
+   "MG": {
+    "pop": 20539989,
+    "ind": {
+     "alfabetizacao": 94.15,
+     "esgoto_adequado": 80.74,
+     "agua_rede": 87.89,
+     "lixo_coletado": 92.68,
+     "internet": 85.59
+    }
+   },
+   "ES": {
+    "pop": 3833712,
+    "ind": {
+     "alfabetizacao": 94.38,
+     "esgoto_adequado": 75.36,
+     "agua_rede": 84.31,
+     "lixo_coletado": 93.05,
+     "internet": 86.91
+    }
+   },
+   "RJ": {
+    "pop": 16055174,
+    "ind": {
+     "alfabetizacao": 96.72,
+     "esgoto_adequado": 84.38,
+     "agua_rede": 84.72,
+     "lixo_coletado": 98.03,
+     "internet": 87.76
+    }
+   },
+   "SP": {
+    "pop": 44411238,
+    "ind": {
+     "alfabetizacao": 96.89,
+     "esgoto_adequado": 91.3,
+     "agua_rede": 95.74,
+     "lixo_coletado": 99.01,
+     "internet": 90.71
+    }
+   },
+   "PR": {
+    "pop": 11444380,
+    "ind": {
+     "alfabetizacao": 95.69,
+     "esgoto_adequado": 70.25,
+     "agua_rede": 88.83,
+     "lixo_coletado": 94.42,
+     "internet": 89.28
+    }
+   },
+   "SC": {
+    "pop": 7610361,
+    "ind": {
+     "alfabetizacao": 97.33,
+     "esgoto_adequado": 54.34,
+     "agua_rede": 84.36,
+     "lixo_coletado": 96.73,
+     "internet": 92.54
+    }
+   },
+   "RS": {
+    "pop": 10882965,
+    "ind": {
+     "alfabetizacao": 96.89,
+     "esgoto_adequado": 63.48,
+     "agua_rede": 86.64,
+     "lixo_coletado": 95.47,
+     "internet": 87.81
+    }
+   },
+   "MS": {
+    "pop": 2757013,
+    "ind": {
+     "alfabetizacao": 94.61,
+     "esgoto_adequado": 50.36,
+     "agua_rede": 87.2,
+     "lixo_coletado": 90.33,
+     "internet": 88.35
+    }
+   },
+   "MT": {
+    "pop": 3658649,
+    "ind": {
+     "alfabetizacao": 94.19,
+     "esgoto_adequado": 33.98,
+     "agua_rede": 80.74,
+     "lixo_coletado": 88.68,
+     "internet": 88.4
+    }
+   },
+   "GO": {
+    "pop": 7056495,
+    "ind": {
+     "alfabetizacao": 94.51,
+     "esgoto_adequado": 53.57,
+     "agua_rede": 84.54,
+     "lixo_coletado": 94.38,
+     "internet": 88.78
+    }
+   },
+   "DF": {
+    "pop": 2817381,
+    "ind": {
+     "alfabetizacao": 97.23,
+     "esgoto_adequado": 86.22,
+     "agua_rede": 93.37,
+     "lixo_coletado": 98.91,
+     "internet": 94.73
+    }
+   }
+  }
+ },
+ "exterior": {
+  "2022t1": {
+   "aptos": 695355,
+   "comp": 304032,
+   "abst": 390750,
+   "brancos": 4857,
+   "nulos": 4650,
+   "validos": 294525,
+   "v": {
+    "21": 618,
+    "22": 122548,
+    "44": 753,
+    "27": 258,
+    "15": 13167,
+    "14": 344,
+    "12": 13341,
+    "16": 464,
+    "30": 3780,
+    "80": 319,
+    "13": 138933
+   }
+  },
+  "2022t2": {
+   "aptos": 695578,
+   "comp": 310148,
+   "abst": 384857,
+   "brancos": 5900,
+   "nulos": 6079,
+   "validos": 298169,
+   "v": {
+    "22": 145264,
+    "13": 152905
+   }
+  },
+  "2026t1": {
+   "aptos": 916534,
+   "comp": 341766,
+   "abst": 574345,
+   "brancos": 5816,
+   "nulos": 5068,
+   "validos": 330882,
+   "v": {
+    "80": 1053,
+    "70": 9734,
+    "27": 825,
+    "35": 373,
+    "16": 373,
+    "14": 8580,
+    "55": 4708,
+    "13": 157387,
+    "29": 199,
+    "21": 421,
+    "22": 143900,
+    "30": 3329
+   }
+  }
+ },
+ "fontes": {
+  "votacao_candidato_munzona_2022.zip": {
+   "url": "https://cdn.tse.jus.br/estatistica/sead/odsele/votacao_candidato_munzona/votacao_candidato_munzona_2022.zip",
+   "sha256": "4c258fb6ef8c25f5f9a7e210d3d143ccbbb81ccb23a5d6201d4b9e31f1fc46c3",
+   "coletado_utc": "anterior (arquivo já presente)"
+  },
+  "votacao_candidato_munzona_2026.zip": {
+   "url": "https://cdn.tse.jus.br/estatistica/sead/odsele/votacao_candidato_munzona/votacao_candidato_munzona_2026.zip",
+   "sha256": "ebcdfb9eecac329d6c75596049344807f8ce1c0633d043f67f857ac144757389",
+   "coletado_utc": "anterior (arquivo já presente)"
+  },
+  "detalhe_votacao_munzona_2022.zip": {
+   "url": "https://cdn.tse.jus.br/estatistica/sead/odsele/detalhe_votacao_munzona/detalhe_votacao_munzona_2022.zip",
+   "sha256": "630a25b574dbc10039ed79886dfad0ccc5e61500fc3d088a1c2effae6df22a2e",
+   "coletado_utc": "2026-10-16T01:50:05.655686+00:00"
+  },
+  "detalhe_votacao_munzona_2026.zip": {
+   "url": "https://cdn.tse.jus.br/estatistica/sead/odsele/detalhe_votacao_munzona/detalhe_votacao_munzona_2026.zip",
+   "sha256": "ea117659d206f08486b5f292a680f6bf356c180b89846305c55d5fbac2a64f1d",
+   "coletado_utc": "2026-10-16T01:50:06.015465+00:00"
+  },
+  "ibge_municipios.json": {
+   "url": "https://servicodados.ibge.gov.br/api/v1/localidades/municipios",
+   "sha256": "86ecdccdf97d72e7e5e46f0854cfcea8bacc28154cc1bc4ed0e6110e3a6c9c02",
+   "coletado_utc": "2026-10-16T01:50:06.455976+00:00"
+  },
+  "ibge_malha_municipios.geojson": {
+   "url": "https://servicodados.ibge.gov.br/api/v3/malhas/paises/BR?formato=application/vnd.geo+json&qualidade=minima&intrarregiao=municipio",
+   "sha256": "5efffedf8772dc8654322affafac4e3e8b001839e7c2af5cab4eb1094dcd6240",
+   "coletado_utc": "2026-10-16T01:50:07.011919+00:00"
+  },
+  "ibge_pop_2022.json": {
+   "url": "https://servicodados.ibge.gov.br/api/v3/agregados/4709/periodos/2022/variaveis/93?localidades=N1[all]|N3[all]|N6[all]",
+   "sha256": "e442ce10d5cc198e822717e12af4180eaa7e8f4d63a83f7cdc88cfb44781f1e7",
+   "coletado_utc": "2026-10-16T01:54:55.965364+00:00"
+  },
+  "ibge_esgoto_2022.json": {
+   "url": "https://servicodados.ibge.gov.br/api/v3/agregados/6805/periodos/2022/variaveis/381?localidades=N1[all]|N3[all]|N6[all]&classificacao=11558[46292,46290]",
+   "sha256": "901d33fd37eb70746c00d577edf31342e211c35f5bbca4ae7a1b16ba9d33682f",
+   "coletado_utc": "2026-10-16T01:54:57.097837+00:00"
+  },
+  "ibge_agua_2022.json": {
+   "url": "https://servicodados.ibge.gov.br/api/v3/agregados/6803/periodos/2022/variaveis/381?localidades=N1[all]|N3[all]|N6[all]&classificacao=1821[72129,72144]",
+   "sha256": "aa1e360cf70ea8679afab31b74b9f1b3368f250ee9da8d8bd84ad15902c4faac",
+   "coletado_utc": "2026-10-16T01:54:58.641700+00:00"
+  },
+  "ibge_lixo_2022.json": {
+   "url": "https://servicodados.ibge.gov.br/api/v3/agregados/6892/periodos/2022/variaveis/381?localidades=N1[all]|N3[all]|N6[all]&classificacao=67[10972,2520]",
+   "sha256": "e19b7d62aa8663232c6842b831f895c5352ef100648659a9077e99a356a756ec",
+   "coletado_utc": "2026-10-16T01:54:59.741161+00:00"
+  },
+  "ibge_internet_2022.json": {
+   "url": "https://servicodados.ibge.gov.br/api/v3/agregados/9936/periodos/2022/variaveis/381?localidades=N1[all]|N3[all]|N6[all]&classificacao=2072[77584,77585]|63[95826]|125[2932]",
+   "sha256": "eb0d04a940a125dfa20cb38d33a22fb92b0481dd3157238865f20da6106d2374",
+   "coletado_utc": "2026-10-16T01:55:01.764479+00:00"
+  },
+  "ibge_alfabetizacao_2022.json": {
+   "url": "https://servicodados.ibge.gov.br/api/v3/agregados/9543/periodos/2022/variaveis/2513?localidades=N1[all]|N3[all]|N6[all]&classificacao=2[6794]|86[95251]|287[100362]",
+   "sha256": "8391d732f7af65488734e9b5e04127fc5c0343487eb70b800c8b860fbb1424ed",
+   "coletado_utc": "2026-10-16T01:55:05.525590+00:00"
+  }
+ },
+ "formulas": {
+  "percentual_votos": "votos do candidato ÷ votos válidos (nominais) × 100 — igual ao critério oficial do TSE para Presidente",
+  "abstencao": "abstenções ÷ aptos × 100",
+  "esgoto_adequado": "Censo 2022, SIDRA 6805: domicílios 'Rede geral, rede pluvial ou fossa ligada à rede' ÷ total × 100",
+  "agua_rede": "Censo 2022, SIDRA 6803: domicílios com ligação à rede geral usada como forma principal ÷ total × 100",
+  "lixo_coletado": "Censo 2022, SIDRA 6892: domicílios com lixo 'Coletado' ÷ total × 100",
+  "internet": "Censo 2022, SIDRA 9936: domicílios com conexão domiciliar à Internet ÷ total × 100",
+  "alfabetizacao": "Censo 2022, SIDRA 9543: taxa de alfabetização de 15+ anos (valor publicado pelo IBGE)"
+ },
+ "validacoes": {
+  "soma_zona_igual_detalhe": true,
+  "validos_brancos_nulos_igual_comparecimento": true,
+  "municipios_tse_mapeados": 5571
+ }
+}

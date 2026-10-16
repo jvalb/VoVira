@@ -1,0 +1,12 @@
+node_modules
+.next
+.git
+.gitignore
+data/raw
+data/work
+data/certs/*.pem
+.system_generated
+scratch
+*.log
+npm-debug.log*
+.DS_Store

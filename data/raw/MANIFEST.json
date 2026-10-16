@@ -1,0 +1,74 @@
+{
+  "votacao_candidato_munzona_2022.zip": {
+    "url": "https://cdn.tse.jus.br/estatistica/sead/odsele/votacao_candidato_munzona/votacao_candidato_munzona_2022.zip",
+    "retrieved_utc": "anterior (arquivo já presente)",
+    "bytes": 581030017,
+    "sha256": "4c258fb6ef8c25f5f9a7e210d3d143ccbbb81ccb23a5d6201d4b9e31f1fc46c3"
+  },
+  "votacao_candidato_munzona_2026.zip": {
+    "url": "https://cdn.tse.jus.br/estatistica/sead/odsele/votacao_candidato_munzona/votacao_candidato_munzona_2026.zip",
+    "retrieved_utc": "anterior (arquivo já presente)",
+    "bytes": 450533407,
+    "sha256": "ebcdfb9eecac329d6c75596049344807f8ce1c0633d043f67f857ac144757389"
+  },
+  "detalhe_votacao_munzona_2022.zip": {
+    "url": "https://cdn.tse.jus.br/estatistica/sead/odsele/detalhe_votacao_munzona/detalhe_votacao_munzona_2022.zip",
+    "retrieved_utc": "2026-10-16T01:50:05.655686+00:00",
+    "bytes": 4430318,
+    "sha256": "630a25b574dbc10039ed79886dfad0ccc5e61500fc3d088a1c2effae6df22a2e"
+  },
+  "detalhe_votacao_munzona_2026.zip": {
+    "url": "https://cdn.tse.jus.br/estatistica/sead/odsele/detalhe_votacao_munzona/detalhe_votacao_munzona_2026.zip",
+    "retrieved_utc": "2026-10-16T01:50:06.015465+00:00",
+    "bytes": 2502843,
+    "sha256": "ea117659d206f08486b5f292a680f6bf356c180b89846305c55d5fbac2a64f1d"
+  },
+  "ibge_municipios.json": {
+    "url": "https://servicodados.ibge.gov.br/api/v1/localidades/municipios",
+    "retrieved_utc": "2026-10-16T01:50:06.455976+00:00",
+    "bytes": 2470036,
+    "sha256": "86ecdccdf97d72e7e5e46f0854cfcea8bacc28154cc1bc4ed0e6110e3a6c9c02"
+  },
+  "ibge_malha_municipios.geojson": {
+    "url": "https://servicodados.ibge.gov.br/api/v3/malhas/paises/BR?formato=application/vnd.geo+json&qualidade=minima&intrarregiao=municipio",
+    "retrieved_utc": "2026-10-16T01:50:07.011919+00:00",
+    "bytes": 3605638,
+    "sha256": "5efffedf8772dc8654322affafac4e3e8b001839e7c2af5cab4eb1094dcd6240"
+  },
+  "ibge_pop_2022.json": {
+    "url": "https://servicodados.ibge.gov.br/api/v3/agregados/4709/periodos/2022/variaveis/93?localidades=N1[all]|N3[all]|N6[all]",
+    "retrieved_utc": "2026-10-16T01:54:55.965364+00:00",
+    "bytes": 692810,
+    "sha256": "e442ce10d5cc198e822717e12af4180eaa7e8f4d63a83f7cdc88cfb44781f1e7"
+  },
+  "ibge_esgoto_2022.json": {
+    "url": "https://servicodados.ibge.gov.br/api/v3/agregados/6805/periodos/2022/variaveis/381?localidades=N1[all]|N3[all]|N6[all]&classificacao=11558[46292,46290]",
+    "retrieved_utc": "2026-10-16T01:54:57.097837+00:00",
+    "bytes": 1376019,
+    "sha256": "901d33fd37eb70746c00d577edf31342e211c35f5bbca4ae7a1b16ba9d33682f"
+  },
+  "ibge_agua_2022.json": {
+    "url": "https://servicodados.ibge.gov.br/api/v3/agregados/6803/periodos/2022/variaveis/381?localidades=N1[all]|N3[all]|N6[all]&classificacao=1821[72129,72144]",
+    "retrieved_utc": "2026-10-16T01:54:58.641700+00:00",
+    "bytes": 1379811,
+    "sha256": "aa1e360cf70ea8679afab31b74b9f1b3368f250ee9da8d8bd84ad15902c4faac"
+  },
+  "ibge_lixo_2022.json": {
+    "url": "https://servicodados.ibge.gov.br/api/v3/agregados/6892/periodos/2022/variaveis/381?localidades=N1[all]|N3[all]|N6[all]&classificacao=67[10972,2520]",
+    "retrieved_utc": "2026-10-16T01:54:59.741161+00:00",
+    "bytes": 1379977,
+    "sha256": "e19b7d62aa8663232c6842b831f895c5352ef100648659a9077e99a356a756ec"
+  },
+  "ibge_internet_2022.json": {
+    "url": "https://servicodados.ibge.gov.br/api/v3/agregados/9936/periodos/2022/variaveis/381?localidades=N1[all]|N3[all]|N6[all]&classificacao=2072[77584,77585]|63[95826]|125[2932]",
+    "retrieved_utc": "2026-10-16T01:55:01.764479+00:00",
+    "bytes": 1380383,
+    "sha256": "eb0d04a940a125dfa20cb38d33a22fb92b0481dd3157238865f20da6106d2374"
+  },
+  "ibge_alfabetizacao_2022.json": {
+    "url": "https://servicodados.ibge.gov.br/api/v3/agregados/9543/periodos/2022/variaveis/2513?localidades=N1[all]|N3[all]|N6[all]&classificacao=2[6794]|86[95251]|287[100362]",
+    "retrieved_utc": "2026-10-16T01:55:05.525590+00:00",
+    "bytes": 695125,
+    "sha256": "8391d732f7af65488734e9b5e04127fc5c0343487eb70b800c8b860fbb1424ed"
+  }
+}
