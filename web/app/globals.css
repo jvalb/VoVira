@@ -96,10 +96,10 @@ small { color: var(--suave); }
 .numeros-cab { display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem; flex-wrap: wrap; margin-bottom: 2rem; }
 .numeros-nota { margin: 0; max-width: 56ch; color: var(--suave); }
 .numeros-grade { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
-.numeros-grade li { border-top: 6px solid var(--preto); background: #fff; padding: 1.2rem 1.2rem 1rem; display: flex; flex-direction: column; box-shadow: 6px 6px 0 var(--preto); }
+.numeros-grade li { background: #fff; padding: 1.2rem 1.2rem 1rem; display: flex; flex-direction: column; box-shadow: 6px 6px 0 var(--preto); }
 .numeros-grade strong { font-family: var(--display); font-weight: 400; font-size: clamp(2.6rem, 4.4vw, 4rem); line-height: 1; }
 .numeros-grade span { font-weight: 800; text-transform: uppercase; letter-spacing: .06em; margin-top: .5rem; }
-.numeros-grade li.num-lula { border-top-color: var(--vermelho); background: var(--vermelho); color: #fff; box-shadow: 6px 6px 0 var(--vermelho-esc); }
+.numeros-grade li.num-lula { background: var(--vermelho); color: #fff; box-shadow: 6px 6px 0 var(--vermelho-esc); }
 .numeros-grade li.num-lula small { color: #ffe3e4; }
 
 /* trilhas */
