@@ -324,3 +324,11 @@ select, input[type="search"] { border: 2px solid var(--preto); border-radius: 0;
 .doc { border-top: 6px solid var(--vermelho); }
 .col-painel > .nota { padding: 1rem; }
 .mapa-wrap { margin: 0 6px 8px 0; }
+
+/* cards de números: cada um com sua cor e sombra dura de mesma proporção (6px) */
+.numeros-grade li.num-flavio { background: #1f7a4d; color: #fff; box-shadow: 6px 6px 0 #0f4a2d; }
+.numeros-grade li.num-flavio small { color: #d9f2e4; }
+.numeros-grade li.num-abst { background: #bfe0f5; color: var(--preto); box-shadow: 6px 6px 0 #5b9cc4; }
+.numeros-grade li.num-abst small { color: #1f3d52; }
+.numeros-grade li.num-dif { background: #f5a3a6; color: var(--preto); box-shadow: 6px 6px 0 #c4545a; }
+.numeros-grade li.num-dif small { color: #4a1215; }

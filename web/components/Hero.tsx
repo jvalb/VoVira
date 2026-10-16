@@ -103,17 +103,17 @@ export default function Hero({
             <span>Lula</span>
             <small>{fInt(r.lula)} votos</small>
           </li>
-          <li>
+          <li className="num-flavio">
             <strong>{fPct(r.oponentePct)}</strong>
             <span>Flávio Bolsonaro</span>
             <small>{fInt(r.oponente)} votos</small>
           </li>
-          <li>
+          <li className="num-abst">
             <strong>{fPct(r.abstPct)}</strong>
             <span>Abstenção</span>
             <small>{fInt(nacional.abst)} pessoas</small>
           </li>
-          <li>
+          <li className="num-dif">
             <strong>{fInt(Math.abs(r.margem))}</strong>
             <span>Diferença em votos</span>
             <small>{r.margem < 0 ? "oponente à frente" : "Lula à frente"}</small>
