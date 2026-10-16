@@ -7,6 +7,7 @@ import { METRICS, MetricKey, ResumoApi, metricByKey } from "@/lib/client-data";
 import { ELECTION_LABEL, EKey, Agg, Meta } from "@/lib/types";
 import Busca from "./Busca";
 import BoasPraticas from "./BoasPraticas";
+import Hero from "./Hero";
 import Nacional from "./Nacional";
 import Painel from "./Painel";
 import Ranking from "./Ranking";
@@ -93,30 +94,48 @@ export default function App({ nacional }: { nacional: NacionalProps }) {
     }
   }, []);
 
+  const irPara = (d: Aba) => {
+    setAba(d);
+    document.getElementById("mapa")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
     <div className="app">
+      <a className="pular" href="#mapa">
+        Pular para o mapa
+      </a>
       <header className="topo">
-        <div className="marca">
-          <h1>VoVira</h1>
-          <p>Dados eleitorais oficiais, por localidade, para quem quer conversar e mobilizar.</p>
-        </div>
-        <Busca resumo={resumo} onPick={(c) => abrir(c, true)} />
-        {dias != null && (
-          <div className="contagem" aria-label="Contagem regressiva para o 2º turno">
-            {dias > 0 ? (
-              <>
-                <strong>{dias}</strong> {dias === 1 ? "dia" : "dias"} para o 2º turno (25/10)
-              </>
-            ) : dias === 0 ? (
-              <strong>2º turno é hoje</strong>
-            ) : (
-              <>2º turno já realizado</>
-            )}
-          </div>
-        )}
+        <button type="button" className="logo" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} aria-label="VoVira, voltar ao início">
+          Vo<span>Vira</span>
+        </button>
+        <nav className="menu" aria-label="Principal">
+          <button type="button" className="ativo" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
+            <i>01</i>Início
+          </button>
+          <button type="button" onClick={() => irPara("local")}>
+            <i>02</i>Mapa
+          </button>
+          <button type="button" onClick={() => irPara("atuar")}>
+            <i>03</i>Onde atuar
+          </button>
+          <button type="button" onClick={() => irPara("praticas")}>
+            <i>04</i>Boas práticas
+          </button>
+          <Link href="/fontes">
+            <i>05</i>Fontes
+          </Link>
+        </nav>
       </header>
 
-      <main className="grade">
+      <Hero
+        nacional={nacional.nacional}
+        totalizacao={nacional.totalizacao}
+        dias={dias}
+        busca={<Busca resumo={resumo} onPick={(c) => abrir(c, true)} />}
+        onIr={irPara}
+      />
+
+      <main className="grade" id="mapa">
         <section className="col-mapa" aria-label="Mapa">
           <div className="controles">
             <label>

@@ -1,0 +1,5 @@
+/* Fontes autohospedadas (SIL OFL): Anton (títulos) e Archivo (texto). */
+@font-face { font-family: Anton; font-weight: 400; font-display: swap; src: url(/fonts/anton.ttf) format('truetype'); }
+@font-face { font-family: Archivo; font-weight: 400; font-display: swap; src: url(/fonts/archivo-400.ttf) format('truetype'); }
+@font-face { font-family: Archivo; font-weight: 700; font-display: swap; src: url(/fonts/archivo-700.ttf) format('truetype'); }
+@font-face { font-family: Archivo; font-weight: 800; font-display: swap; src: url(/fonts/archivo-800.ttf) format('truetype'); }
