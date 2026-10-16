@@ -333,3 +333,61 @@ select, input[type="search"] { border: 2px solid var(--preto); border-radius: 0;
 .numeros-grade li.num-abst small { color: #1f3d52; }
 .numeros-grade li.num-dif { background: #f5a3a6; color: var(--preto); box-shadow: 6px 6px 0 #c4545a; }
 .numeros-grade li.num-dif small { color: #4a1215; }
+
+/* ===== Página de Fontes e Metodologia integrada ao padrão VoVira ===== */
+.logo { text-decoration: none; }
+.fontes-hero { position: relative; background: var(--preto); color: #fff; padding: 4.5rem var(--margem) 4rem; border-bottom: 3px solid var(--vermelho); display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 3rem; align-items: end; overflow: hidden; }
+.fontes-hero::after { content: ""; position: absolute; right: -8%; top: 0; bottom: 0; width: 42%; background: linear-gradient(115deg, transparent 0 18%, rgba(208, 18, 26, .16) 18% 36%, rgba(208, 18, 26, .07) 36%); pointer-events: none; }
+.fontes-hero-esq { position: relative; z-index: 2; }
+.fontes-hero h1 { font-family: var(--display); font-weight: 400; text-transform: uppercase; font-size: clamp(3.2rem, 6.5vw, 5.6rem); line-height: .95; margin: 0 0 1.2rem; }
+.fontes-hero .cta { text-decoration: none; display: inline-block; }
+.fontes-hero .hero-acoes { margin-bottom: 0; }
+.placar-fontes { position: relative; z-index: 2; justify-self: end; display: flex; margin: 0; border: 3px solid #fff; background: rgba(208, 18, 26, .22); backdrop-filter: blur(2px); }
+.placar-fontes > div { padding: .8rem 1.2rem; border-right: 3px solid #fff; }
+.placar-fontes > div:last-child { border-right: 0; }
+.placar-fontes dt { font-size: .62rem; letter-spacing: .14em; text-transform: uppercase; font-weight: 800; color: #f2e9e8; margin-bottom: .2rem; white-space: nowrap; }
+.placar-fontes dd { margin: 0; font-family: var(--display); font-size: 2.1rem; line-height: 1.05; color: #fff; text-transform: uppercase; white-space: nowrap; }
+
+.fontes-secao { padding: 5rem var(--margem); border-bottom: 3px solid var(--preto); }
+.fontes-clara { background: var(--papel); color: var(--texto); }
+.fontes-escura { background: var(--preto); color: #fff; border-bottom-color: var(--vermelho); }
+.fontes-secao h2 { font-family: var(--display); font-weight: 400; text-transform: uppercase; font-size: clamp(2.4rem, 5vw, 4rem); line-height: .98; margin: 0 0 2rem; }
+.fontes-sub-esc { color: #d6cfcd; max-width: 68ch; margin: -1rem 0 2.2rem; font-size: 1rem; }
+
+.fontes-grade-4 { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+.fontes-card { background: #fff; border: 3px solid var(--preto); box-shadow: 6px 6px 0 var(--preto); padding: 1.5rem 1.6rem; display: flex; flex-direction: column; gap: .45rem; }
+.fontes-card:first-child { border-color: var(--preto); box-shadow: 6px 6px 0 var(--vermelho); }
+.fc-num { font-family: var(--display); font-size: 2.8rem; line-height: 1; color: var(--vermelho); }
+.fontes-card h3 { font-family: var(--display); font-weight: 400; text-transform: uppercase; font-size: 1.55rem; line-height: 1.08; margin: 0; color: var(--preto); }
+.fontes-card p { margin: 0; color: var(--texto); font-size: .95rem; line-height: 1.5; }
+
+.formulas-grade { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.formula-card { background: var(--grafite); border: 2px solid #fff; box-shadow: 5px 5px 0 var(--vermelho); padding: 1.2rem 1.4rem; display: flex; flex-direction: column; gap: .6rem; }
+.formula-topo { display: flex; align-items: center; gap: .75rem; border-bottom: 2px solid rgba(255, 255, 255, .2); padding-bottom: .55rem; }
+.formula-idx { font-family: var(--display); font-size: 1.6rem; line-height: 1; color: var(--vermelho); }
+.formula-card code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .9rem; font-weight: 700; background: var(--preto); color: #fff; border: 1px solid rgba(255, 255, 255, .45); padding: .2rem .5rem; }
+.formula-card p { margin: 0; color: #f2ecea; font-size: .95rem; }
+
+.limites-grade { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.limite-card { background: #fff; border: 2px solid var(--preto); border-left: 6px solid var(--vermelho); padding: 1.1rem 1.3rem; display: grid; grid-template-columns: auto 1fr; gap: 1rem; align-items: start; }
+.lc-num { font-family: var(--display); font-size: 2.2rem; line-height: 1; color: var(--preto); }
+.limite-card h3 { font-family: var(--display); font-weight: 400; text-transform: uppercase; font-size: 1.25rem; margin: 0 0 .25rem; color: var(--preto); letter-spacing: .02em; }
+.limite-card p { margin: 0; font-size: .9rem; color: var(--suave); line-height: 1.45; }
+
+.tabela-fontes-wrap { background: #fff; border: 3px solid var(--preto); box-shadow: 6px 6px 0 var(--vermelho); overflow-x: auto; }
+.tabela-fontes { margin: 0; font-size: .88rem; }
+.tabela-fontes th, .tabela-fontes td { text-align: left; vertical-align: middle; padding: .75rem .9rem; border-bottom: 1px solid var(--borda); }
+.tabela-fontes thead th { background: var(--preto); color: #fff; font-size: .72rem; letter-spacing: .1em; border-bottom: 3px solid var(--vermelho); }
+.tabela-fontes tbody tr:hover { background: var(--vermelho-claro); }
+.tabela-fontes tbody th { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-weight: 700; color: var(--preto); white-space: nowrap; }
+.tabela-fontes a { color: var(--vermelho-esc); font-weight: 600; text-decoration: underline; word-break: break-all; }
+.tabela-fontes a:hover { color: var(--vermelho); }
+.tf-data { white-space: nowrap; font-size: .82rem; color: var(--suave); }
+.tf-hash { display: inline-block; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .75rem; background: var(--fundo); border: 1px solid var(--preto); padding: .2rem .4rem; color: var(--preto); word-break: break-all; }
+
+@media (max-width: 900px) {
+  .fontes-hero { grid-template-columns: 1fr; padding: 2.5rem var(--margem); gap: 1.8rem; }
+  .placar-fontes { justify-self: start; flex-wrap: wrap; }
+  .fontes-secao { padding: 3rem var(--margem); }
+  .fontes-grade-4, .formulas-grade, .limites-grade { grid-template-columns: 1fr; gap: 16px; }
+}

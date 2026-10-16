@@ -1,85 +1,242 @@
 import Link from "next/link";
 import { store } from "@/lib/data";
+import { fInt } from "@/lib/format";
 
 export const metadata = { title: "Fontes e metodologia — VoVira" };
+
+const PRINCIPIOS = [
+  {
+    n: "01",
+    titulo: "Coleta direta dos órgãos oficiais",
+    texto:
+      "Os arquivos originais do TSE e do IBGE são baixados diretamente dos servidores oficiais e guardados exatamente como recebidos. Abaixo estão URL, data de coleta e hash SHA-256 de cada arquivo para que qualquer pessoa possa baixar e conferir.",
+  },
+  {
+    n: "02",
+    titulo: "Somas exatas de inteiros",
+    texto:
+      "Todos os números eleitorais exibidos (votos, aptos, comparecimento, abstenções, brancos e nulos) são somas de inteiros do TSE. Nada é estimado, suavizado ou arredondado antes do cálculo.",
+  },
+  {
+    n: "03",
+    titulo: "Validação cruzada obrigatória",
+    texto:
+      "O processamento falha se alguma checagem não passar: soma dos votos por candidato igual aos votos nominais válidos em cada zona; válidos + brancos + nulos igual ao comparecimento; correspondência unívoca entre códigos TSE e IBGE.",
+  },
+  {
+    n: "04",
+    titulo: "Reprodução integral dos totais",
+    texto:
+      "Os totais nacionais calculados reproduzem exatamente os resultados oficiais divulgados pelo TSE (ex.: 2022, 1º turno: Lula 57.259.504 votos; 2º turno: 60.345.999 votos).",
+  },
+];
+
+const LIMITES = [
+  {
+    n: "01",
+    titulo: "Dados de 2026 referentes ao 1º turno",
+    texto: "O 2º turno de 2026 ainda não aconteceu: os números de 2026 exibidos no painel referem-se ao resultado oficial do 1º turno (04/10/2026).",
+  },
+  {
+    n: "02",
+    titulo: "Tendência histórica não é causa",
+    texto: "Comparar eleições diferentes mostra tendência territorial, não relação de causa e efeito, já que o quadro de candidatos e o contexto mudam.",
+  },
+  {
+    n: "03",
+    titulo: "Geometria por município, zonas em tabela",
+    texto: "O TSE publica resultados por zona e seção, mas não existem polígonos oficiais de zonas eleitorais; por isso o mapa exibe municípios e as zonas aparecem detalhadas em tabela.",
+  },
+  {
+    n: "04",
+    titulo: "Indicador socioeconômico não define voto",
+    texto: "Os indicadores do Censo 2022 (IBGE) descrevem condições reais de infraestrutura e vida da população local; eles contextualizam prioridades públicas, mas não determinam o voto individual.",
+  },
+  {
+    n: "05",
+    titulo: "Simulador baseado em hipóteses do usuário",
+    texto: "O simulador aplica matematicamente as porcentagens escolhidas nos controles deslizantes sobre os votos do 1º turno. Não é pesquisa eleitoral nem previsão.",
+  },
+  {
+    n: "06",
+    titulo: "Município recém-instalado (MT)",
+    texto: "Boa Esperança do Norte (MT) é município novo: ainda não possui polígono separado na malha vigente do IBGE nem série histórica própria de 2022 ou Censo 2022.",
+  },
+  {
+    n: "07",
+    titulo: "Votos no exterior (ZZ)",
+    texto: "Os votos registrados em seções no exterior entram integralmente nos totais nacionais do TSE, mas não pertencem a nenhum município brasileiro no mapa.",
+  },
+];
 
 export default function Fontes() {
   const { meta } = store();
   const arquivos = Object.entries(meta.fontes);
+  const formulas = Object.entries(meta.formulas);
+
   return (
-    <main className="doc">
-      <p>
-        <Link href="/">← Voltar ao mapa</Link>
-      </p>
-      <h1>Fontes e metodologia</h1>
+    <div className="app fontes-app">
+      <a className="pular" href="#conteudo-fontes">
+        Pular para o conteúdo
+      </a>
 
-      <h2>Princípio: dados oficiais, sem alteração</h2>
-      <ul>
-        <li>
-          Os arquivos originais do TSE e do IBGE são baixados diretamente dos servidores oficiais e guardados <strong>exatamente como recebidos</strong>. Abaixo estão URL, data de coleta e SHA-256 de cada um. Qualquer pessoa pode baixar o mesmo arquivo e conferir.
-        </li>
-        <li>
-          Números eleitorais exibidos (votos, aptos, comparecimento, abstenções, brancos, nulos) são <strong>somas de inteiros</strong> do TSE. Nada é estimado, suavizado ou arredondado. Percentuais são calculados na hora, com as fórmulas abaixo.
-        </li>
-        <li>
-          O processamento falha se alguma checagem não passar: soma dos votos por candidato = votos nominais válidos do TSE em cada zona; válidos + brancos + nulos = comparecimento; todo município do TSE corresponde a um único município do IBGE. Resultado desta versão: {" "}
-          <strong>{String(meta.validacoes.municipios_tse_mapeados)} municípios mapeados, validações aprovadas</strong>.
-        </li>
-        <li>
-          Os totais nacionais calculados reproduzem os resultados oficiais divulgados (ex.: 2022, 1º turno: Lula 57.259.504 votos; 2º turno: 60.345.999).
-        </li>
-      </ul>
+      <header className="topo">
+        <Link href="/" className="logo" aria-label="VoVira, voltar ao início">
+          Vo<span>Vira</span>
+        </Link>
+        <nav className="menu" aria-label="Principal">
+          <Link href="/">
+            <i>01</i>Início
+          </Link>
+          <Link href="/#mapa">
+            <i>02</i>Mapa
+          </Link>
+          <Link href="/?aba=atuar#mapa">
+            <i>03</i>Onde atuar
+          </Link>
+          <Link href="/?aba=praticas#mapa">
+            <i>04</i>Boas práticas
+          </Link>
+          <Link href="/fontes" className="ativo" aria-current="page">
+            <i>05</i>Fontes
+          </Link>
+        </nav>
+      </header>
 
-      <h2>Fórmulas</h2>
-      <ul>
-        {Object.entries(meta.formulas).map(([k, v]) => (
-          <li key={k}>
-            <code>{k}</code>: {v}
-          </li>
-        ))}
-      </ul>
+      <main id="conteudo-fontes">
+        <section className="fontes-hero" aria-labelledby="fontes-titulo">
+          <div className="fontes-hero-esq">
+            <p className="eyebrow">05 · Transparência e verificação pública</p>
+            <h1 id="fontes-titulo">
+              Fontes e
+              <br />
+              <span className="hero-marca">metodologia.</span>
+            </h1>
+            <p className="hero-sub">Cada número tem documento de origem, fórmula aberta e hash de integridade.</p>
+            <p className="hero-apoio">
+              Nenhum dado bruto do TSE ou do IBGE é alterado. Resultado desta versão:{" "}
+              <strong>{fInt(Number(meta.validacoes.municipios_tse_mapeados))} municípios mapeados, todas as validações aprovadas</strong>.
+            </p>
+            <div className="hero-acoes">
+              <Link href="/#mapa" className="cta">
+                ← Voltar ao mapa
+              </Link>
+              <span className="selo">SHA-256 verificado</span>
+            </div>
+          </div>
 
-      <h2>Limites que você deve conhecer</h2>
-      <ul>
-        <li>O 2º turno de 2026 ainda não aconteceu: os dados de 2026 são do 1º turno (04/10/2026).</li>
-        <li>Comparar eleições diferentes mostra tendência, não causa: os candidatos mudam.</li>
-        <li>Mapa por município. O TSE publica resultados por zona e seção, mas não existem polígonos oficiais de zonas; por isso zonas aparecem em tabela.</li>
-        <li>Indicadores do Censo 2022 (IBGE) descrevem condições de vida; eles não dizem em quem as pessoas votam.</li>
-        <li>O simulador usa hipóteses escolhidas por quem usa. Não é pesquisa nem previsão.</li>
-        <li>Boa Esperança do Norte (MT) é município novo: não tem polígono na malha vigente do IBGE, nem série de 2022 ou Censo 2022 próprios.</li>
-        <li>Votos no exterior entram nos totais nacionais, mas não em nenhum município.</li>
-      </ul>
+          <dl className="placar-fontes" aria-label="Resumo da auditoria de dados">
+            <div>
+              <dt>Municípios mapeados</dt>
+              <dd>{fInt(Number(meta.validacoes.municipios_tse_mapeados))}</dd>
+            </div>
+            <div>
+              <dt>Bases oficiais</dt>
+              <dd>{arquivos.length} arquivos</dd>
+            </div>
+            <div>
+              <dt>Integridade</dt>
+              <dd>SHA-256</dd>
+            </div>
+          </dl>
+        </section>
 
-      <h2>Arquivos de origem</h2>
-      <p>
-        Totalização TSE: 1º turno 2026 — {meta.tse_arquivos["2026t1"].ultima_totalizacao}. Processado em {meta.gerado_em_utc}.
-      </p>
-      <table className="tab">
-        <thead>
-          <tr>
-            <th>Arquivo</th>
-            <th>URL de origem</th>
-            <th>Coletado (UTC)</th>
-            <th>SHA-256</th>
-          </tr>
-        </thead>
-        <tbody>
-          {arquivos.map(([nome, f]) => (
-            <tr key={nome}>
-              <th>{nome}</th>
-              <td>
-                <a href={f.url} target="_blank" rel="noreferrer noopener">
-                  {f.url}
-                </a>
-              </td>
-              <td>{f.coletado_utc}</td>
-              <td>
-                <code>{f.sha256}</code>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </main>
+        <section className="fontes-secao fontes-clara" aria-labelledby="principios-t">
+          <p className="eyebrow eyebrow-esc">01 · Integridade dos dados</p>
+          <h2 id="principios-t">Dados oficiais, sem alteração</h2>
+          <ol className="fontes-grade-4">
+            {PRINCIPIOS.map((p) => (
+              <li key={p.n} className="fontes-card">
+                <span className="fc-num">{p.n}</span>
+                <h3>{p.titulo}</h3>
+                <p>{p.texto}</p>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <section className="fontes-secao fontes-escura" aria-labelledby="formulas-t">
+          <p className="eyebrow">02 · Reprodutibilidade matemática</p>
+          <h2 id="formulas-t">Fórmulas calculadas na hora</h2>
+          <p className="fontes-sub-esc">
+            Quando o VoVira calcula um percentual, margem ou estimativa de mobilização, a conta é feita em tempo de execução a partir dos inteiros originais:
+          </p>
+          <ul className="formulas-grade">
+            {formulas.map(([k, v], idx) => (
+              <li key={k} className="formula-card">
+                <div className="formula-topo">
+                  <span className="formula-idx">{String(idx + 1).padStart(2, "0")}</span>
+                  <code>{k}</code>
+                </div>
+                <p>{v}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section className="fontes-secao fontes-clara" aria-labelledby="limites-t">
+          <p className="eyebrow eyebrow-esc">03 · Transparência metodológica</p>
+          <h2 id="limites-t">Limites que você deve conhecer</h2>
+          <ol className="limites-grade">
+            {LIMITES.map((l) => (
+              <li key={l.n} className="limite-card">
+                <span className="lc-num">{l.n}</span>
+                <div>
+                  <h3>{l.titulo}</h3>
+                  <p>{l.texto}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <section className="fontes-secao fontes-clara fontes-arquivos" aria-labelledby="arquivos-t">
+          <div className="numeros-cab">
+            <div>
+              <p className="eyebrow eyebrow-esc">04 · Auditoria pública (SHA-256)</p>
+              <h2 id="arquivos-t">Arquivos de origem</h2>
+            </div>
+            <p className="numeros-nota">
+              Totalização TSE (1º turno 2026): <strong>{meta.tse_arquivos["2026t1"].ultima_totalizacao}</strong>. Pipeline processado em{" "}
+              <strong>{meta.gerado_em_utc}</strong>.
+            </p>
+          </div>
+
+          <div className="tabela-fontes-wrap">
+            <table className="tab tabela-fontes">
+              <thead>
+                <tr>
+                  <th>Arquivo</th>
+                  <th>URL oficial de origem</th>
+                  <th>Coletado (UTC)</th>
+                  <th>Hash SHA-256</th>
+                </tr>
+              </thead>
+              <tbody>
+                {arquivos.map(([nome, f]) => (
+                  <tr key={nome}>
+                    <th>{nome}</th>
+                    <td>
+                      <a href={f.url} target="_blank" rel="noreferrer noopener">
+                        {f.url}
+                      </a>
+                    </td>
+                    <td className="tf-data">{f.coletado_utc}</td>
+                    <td>
+                      <code className="tf-hash">{f.sha256}</code>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+
+      <footer className="rodape">
+        Dados: TSE (Dados Abertos) e IBGE, sem alteração; percentuais calculados na hora.{" "}
+        <Link href="/#mapa">Voltar ao mapa interativo</Link>.
+      </footer>
+    </div>
   );
 }

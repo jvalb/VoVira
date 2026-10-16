@@ -42,6 +42,10 @@ export default function App({ nacional }: { nacional: NacionalProps }) {
         setResumo(j);
         if (typeof window !== "undefined") {
           const params = new URLSearchParams(window.location.search);
+          const initialAba = params.get("aba");
+          if (initialAba === "atuar" || initialAba === "praticas" || initialAba === "local") {
+            setAba(initialAba);
+          }
           const initialCode = params.get("m");
           if (initialCode && j.municipios[initialCode]) {
             setCodigo(initialCode);
