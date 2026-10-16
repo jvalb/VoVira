@@ -213,6 +213,11 @@ export default function Painel({ codigo }: { codigo: string }) {
 
       <section className="card" aria-labelledby="terr-t">
         <h3 id="terr-t">Perfil do território (Censo 2022)</h3>
+        {d.pop == null && (
+          <p className="nota">
+            Município instalado após a realização do Censo Demográfico 2022; sem série própria do IBGE nesta edição (exibidas as referências de {d.uf} e Brasil).
+          </p>
+        )}
         <table className="tab">
           <thead>
             <tr>

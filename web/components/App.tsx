@@ -22,6 +22,7 @@ export interface NacionalProps {
   nacional: Agg;
   candidatos: Meta["candidatos"]["2026t1"];
   totalizacao: string;
+  municipiosMapeados?: number;
 }
 
 export default function App({ nacional }: { nacional: NacionalProps }) {
@@ -148,6 +149,7 @@ export default function App({ nacional }: { nacional: NacionalProps }) {
       <Hero
         nacional={nacional.nacional}
         totalizacao={nacional.totalizacao}
+        municipiosMapeados={nacional.municipiosMapeados}
         dias={dias}
         busca={<Busca resumo={resumo} onPick={(c) => abrir(c, true)} />}
         onIr={irPara}

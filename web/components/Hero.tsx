@@ -25,12 +25,14 @@ const TRILHAS: Trilha[] = [
 export default function Hero({
   nacional,
   totalizacao,
+  municipiosMapeados = 5571,
   dias,
   busca,
   onIr,
 }: {
   nacional: Agg;
   totalizacao: string;
+  municipiosMapeados?: number;
   dias: number | null;
   busca: ReactNode;
   onIr: (d: Destino) => void;
@@ -93,7 +95,7 @@ export default function Hero({
             </div>
             <div>
               <dt>Municípios</dt>
-              <dd>5.570</dd>
+              <dd>{fInt(municipiosMapeados)}</dd>
             </div>
             <div>
               <dt>Ano</dt>

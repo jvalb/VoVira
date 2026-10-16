@@ -589,7 +589,10 @@
  },
  "formulas": {
   "percentual_votos": "votos do candidato ÷ votos válidos (nominais) × 100 — igual ao critério oficial do TSE para Presidente",
+  "margem_pp": "(votos de Lula − votos do oponente) ÷ votos válidos (nominais) × 100",
   "abstencao": "abstenções ÷ aptos × 100",
+  "virada_novos_votos": "máx(0, 1 − (votos de Lula − votos do oponente)) — votos novos para ficar 1 voto à frente",
+  "virada_trocas": "⌈máx(0, 1 − (votos de Lula − votos do oponente)) ÷ 2⌉ — cada troca altera a diferença em 2 votos",
   "esgoto_adequado": "Censo 2022, SIDRA 6805: domicílios 'Rede geral, rede pluvial ou fossa ligada à rede' ÷ total × 100",
   "agua_rede": "Censo 2022, SIDRA 6803: domicílios com ligação à rede geral usada como forma principal ÷ total × 100",
   "lixo_coletado": "Censo 2022, SIDRA 6892: domicílios com lixo 'Coletado' ÷ total × 100",
