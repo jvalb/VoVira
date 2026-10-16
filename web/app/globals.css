@@ -79,10 +79,13 @@ small { color: var(--suave); }
 
 .hero-visual { position: relative; overflow: hidden; clip-path: polygon(14% 0, 100% 0, 100% 100%, 0 100%); margin-left: -6%; background: linear-gradient(to top, rgba(14,13,13,.78), transparent 42%), linear-gradient(rgba(208,18,26,.3), rgba(208,18,26,.3)), url(/img/hero.jpg) 70% 30% / cover no-repeat, var(--vermelho); }
 .hero-visual::before { content: ""; position: absolute; inset: 0; background: linear-gradient(115deg, rgba(142,11,16,.88) 0 18%, transparent 18%); }
-.hero-contagem { position: absolute; top: 2.5rem; right: var(--margem); z-index: 2; text-align: center; color: #fff; display: flex; flex-direction: column; align-items: center; background: var(--vermelho); border: 3px solid #fff; box-shadow: 8px 8px 0 var(--preto); padding: .9rem 1.6rem 1rem; }
-.hero-contagem strong { font-family: var(--display); font-weight: 400; font-size: clamp(5rem, 9vw, 8.5rem); line-height: .9; text-shadow: 5px 5px 0 var(--preto); }
-.hero-contagem strong.hoje { font-size: clamp(3rem, 6vw, 5.5rem); }
-.hero-contagem span { font-weight: 800; text-transform: uppercase; letter-spacing: .14em; font-size: .78rem; margin-top: .6rem; background: var(--preto); padding: .35rem .7rem; }
+.hero-contagem { position: absolute; top: 28px; right: var(--margem); z-index: 2; width: 116px; text-align: center; color: #fff; display: flex; flex-direction: column; align-items: stretch; background: rgba(208, 18, 26, .22); backdrop-filter: blur(2px); border: 3px solid #fff; padding: 0; }
+.hero-contagem .hc-topo { font-size: .6rem; font-weight: 800; text-transform: uppercase; letter-spacing: .16em; color: #fff; padding: .5rem .6rem .45rem; border-bottom: 2px solid rgba(255, 255, 255, .85); text-shadow: 0 1px 4px rgba(0, 0, 0, .65); }
+.hero-contagem strong { font-family: var(--display); font-weight: 400; font-size: 5.5rem; line-height: .9; padding: .55rem .5rem 0; text-shadow: 3px 3px 0 rgba(14, 13, 13, .75), 0 2px 10px rgba(0, 0, 0, .5); }
+.hero-contagem strong.hoje { font-size: 2.8rem; padding: .6rem .4rem; }
+.hero-contagem .hc-unid { font-family: var(--display); font-size: 1.35rem; letter-spacing: .08em; text-transform: uppercase; line-height: 1; padding: .1rem .5rem .6rem; text-shadow: 2px 2px 0 rgba(14, 13, 13, .7); }
+.hero-contagem .hc-rodape { display: flex; flex-direction: column; gap: .15rem; font-size: .6rem; font-weight: 800; text-transform: uppercase; letter-spacing: .14em; color: #fff; padding: .5rem .6rem .55rem; border-top: 2px solid rgba(255, 255, 255, .85); text-shadow: 0 1px 4px rgba(0, 0, 0, .65); }
+.hero-contagem .hc-rodape small { font-family: var(--display); font-size: 1.2rem; letter-spacing: .05em; color: #fff; font-weight: 400; line-height: 1.05; }
 .placar-hero { position: absolute; right: var(--margem); bottom: 28px; z-index: 2; display: flex; margin: 0; border: 3px solid #fff; background: var(--preto); }
 .placar-hero > div { padding: .45rem .9rem; border-right: 3px solid #fff; }
 .placar-hero > div:last-child { border-right: 0; }
@@ -124,8 +127,8 @@ small { color: var(--suave); }
   .hero { grid-template-columns: 1fr; min-height: 0; }
   .hero-texto { padding: 2.5rem var(--margem); }
   .hero-visual { clip-path: polygon(0 10%, 100% 0, 100% 100%, 0 100%); margin: 0; min-height: 480px; }
-  .hero-contagem { top: 4rem; padding: .6rem 1rem .7rem; }
-  .hero-contagem strong { font-size: 4.5rem; }
+  .hero-contagem { top: 3.5rem; right: var(--margem); width: 100px; padding: 0; }
+  .hero-contagem strong { font-size: 4.2rem; }
   .numeros, .trilhas { padding: 3.5rem var(--margem); }
   .numeros-grade, .trilhas-grade { grid-template-columns: 1fr 1fr; gap: 16px; }
   .trilhas-grade { grid-template-columns: 1fr; }

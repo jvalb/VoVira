@@ -63,13 +63,25 @@ export default function Hero({
           <div className="hero-contagem">
             {dias != null && dias > 0 ? (
               <>
+                <span className="hc-topo">Faltam</span>
                 <strong>{dias}</strong>
-                <span>{dias === 1 ? "dia" : "dias"} para o 2º turno</span>
+                <span className="hc-unid">{dias === 1 ? "Dia" : "Dias"}</span>
+                <span className="hc-rodape">
+                  2º turno
+                  <small>25 · out</small>
+                </span>
               </>
             ) : dias === 0 ? (
-              <strong className="hoje">É hoje</strong>
+              <>
+                <span className="hc-topo">Votação</span>
+                <strong className="hoje">Hoje</strong>
+                <span className="hc-rodape">
+                  2º turno
+                  <small>25 · out</small>
+                </span>
+              </>
             ) : (
-              <span>2º turno realizado</span>
+              <span className="hc-rodape">2º turno realizado</span>
             )}
           </div>
           <dl className="placar-hero">
