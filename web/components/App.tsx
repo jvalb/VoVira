@@ -137,6 +137,10 @@ export default function App({ nacional }: { nacional: NacionalProps }) {
 
       <main className="grade" id="mapa">
         <section className="col-mapa" aria-label="Mapa">
+          <div className="mapa-cab">
+            <p className="eyebrow eyebrow-esc">02 · Mapa</p>
+            <h2>Resultado por município</h2>
+          </div>
           <div className="controles">
             <label>
               Mostrar
@@ -163,7 +167,7 @@ export default function App({ nacional }: { nacional: NacionalProps }) {
           {erro && <p className="erro">Falha ao carregar dados: {erro}</p>}
           <MapView resumo={resumo} eleicao={metric.fixaEleicao ? "2026t1" : eleicao} metric={metric} selecionado={codigo} foco={foco} onSelect={(c) => abrir(c, false)} />
           <p className="nota rodape-mapa">
-            Cada polígono é um município, e a área não é proporcional ao número de eleitores: cidades grandes aparecem pequenas. Use <em>Onde atuar</em> para ver onde há mais votos em jogo.
+            Cada polígono é um município; a área não é proporcional ao número de eleitores. Clique para abrir a localidade.
           </p>
         </section>
 

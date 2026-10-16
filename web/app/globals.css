@@ -274,3 +274,53 @@ details.card summary { cursor: pointer; }
   .insight { border-left-width: 3px; background: #fafafa; }
 }
 
+
+/* ===== Seção do mapa e painel no padrão VoVira (preto, branco, vermelho; quinas retas) ===== */
+.col-mapa { background: var(--papel); padding: 1rem 1.2rem; gap: .7rem; }
+.mapa-cab .eyebrow { margin-bottom: .2rem; }
+.mapa-cab h2 { font-family: var(--display); font-weight: 400; text-transform: uppercase; font-size: 2.2rem; line-height: 1; margin: 0; }
+.controles { gap: 1rem; }
+.controles label, .campo { font-size: .7rem; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; color: var(--preto); }
+select, input[type="search"] { border: 2px solid var(--preto); border-radius: 0; padding: .45rem .6rem; font-weight: 600; }
+.nota { color: var(--suave); }
+.mapa-wrap { border: 3px solid var(--preto); border-radius: 0; box-shadow: 6px 6px 0 var(--vermelho); background: #fff; }
+.legenda { border: 2px solid var(--preto); border-radius: 0; background: #fff; }
+.legenda-barra { border-radius: 0; }
+.tip { background: var(--preto); border-radius: 0; border-left: 4px solid var(--vermelho); }
+.rodape-mapa { font-size: .78rem; }
+
+.col-painel { border-left: 3px solid var(--preto); }
+.abas { background: var(--preto); border-bottom: 3px solid var(--vermelho); }
+.abas button { font-family: var(--display); text-transform: uppercase; letter-spacing: .04em; font-size: 1.05rem; color: #d6cfcd; border-bottom: 4px solid transparent; }
+.abas button:hover { color: #fff; }
+.abas button[aria-selected="true"] { color: #fff; border-bottom-color: var(--vermelho); font-weight: 400; }
+.abas :focus-visible { outline-color: #fff; }
+.voltar { color: var(--vermelho); font-weight: 800; text-transform: uppercase; letter-spacing: .06em; font-size: .8rem; }
+.painel-conteudo h2 { font-family: var(--display); font-weight: 400; text-transform: uppercase; font-size: 1.9rem; line-height: 1.05; margin: 0; }
+.uf { background: var(--preto); color: #fff; border-radius: 0; font-family: Archivo, sans-serif; font-weight: 800; }
+.card { border: 2px solid var(--preto); border-radius: 0; }
+.card h3, .painel-conteudo > h3 { font-family: var(--display); font-weight: 400; text-transform: uppercase; letter-spacing: .02em; font-size: 1.35rem; border-left: 5px solid var(--vermelho); padding-left: .55rem; margin: 0 0 .5rem; }
+.placar > div { border-radius: 0; border-color: var(--preto); }
+.placar strong { font-family: var(--display); font-weight: 400; font-size: 1.9rem; }
+.destaque { background: var(--vermelho-claro); border: 0; border-left: 5px solid var(--vermelho); border-radius: 0; }
+.erro { border-radius: 0; }
+.tab thead th { color: var(--preto); text-transform: uppercase; font-size: .7rem; letter-spacing: .08em; border-bottom: 2px solid var(--preto); }
+.b-trilho { border-radius: 0; background: #ece6e4; height: 14px; }
+.seletor button { border: 2px solid var(--preto); border-radius: 0; font-weight: 700; }
+.seletor button:hover { background: var(--vermelho-claro); }
+.seletor button[aria-pressed="true"], .seletor button[aria-selected="true"] { background: var(--vermelho); border-color: var(--vermelho); color: #fff; }
+.insight { border-radius: 0; background: #fff; border: 1px solid var(--borda); border-left-width: 5px; }
+.insight .tag { color: var(--preto); }
+.rank button { border: 2px solid var(--preto); border-radius: 0; }
+.rank button:hover { background: var(--vermelho-claro); border-color: var(--vermelho); }
+.btn-acao { border: 2px solid var(--preto); border-radius: 0; background: #fff; text-transform: uppercase; letter-spacing: .04em; font-size: .75rem; font-weight: 800; }
+.btn-acao:hover { background: var(--preto); color: #fff; border-color: var(--preto); }
+.btn-whats { background: var(--vermelho); border-color: var(--vermelho); color: #fff; }
+.btn-whats:hover { background: var(--vermelho-esc); border-color: var(--vermelho-esc); color: #fff; }
+.btn-sucesso { background: var(--preto) !important; border-color: var(--preto) !important; color: #fff !important; }
+.busca-lista { border: 2px solid var(--preto); border-radius: 0; }
+.busca-lista button:hover, .busca-lista button.ativo { background: var(--vermelho-claro); }
+.hero-busca .busca-lista { box-shadow: 4px 4px 0 var(--vermelho); }
+.doc { border-top: 6px solid var(--vermelho); }
+.col-painel > .nota { padding: 1rem; }
+.mapa-wrap { margin: 0 6px 8px 0; }

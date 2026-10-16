@@ -40,30 +40,10 @@ export default function Nacional({ meta }: { meta: { nacional: Agg; candidatos: 
 
   return (
     <div className="painel-conteudo">
-      <h2>Brasil — 1º turno 2026</h2>
-      <p className="nota">Totalização do TSE em {meta.totalizacao}. Clique em qualquer município no mapa para ver a localidade.</p>
-      <div className="placar" role="group" aria-label="Resultado nacional">
-        <div className="p-lula">
-          <span>Lula</span>
-          <strong>{fPct(r.lulaPct)}</strong>
-          <small>{fInt(r.lula)} votos</small>
-        </div>
-        <div className="p-opo">
-          <span>Flávio Bolsonaro</span>
-          <strong>{fPct(r.oponentePct)}</strong>
-          <small>{fInt(r.oponente)} votos</small>
-        </div>
-        <div className="p-abst">
-          <span>Abstenção</span>
-          <strong>{fPct(r.abstPct)}</strong>
-          <small>{fInt(meta.nacional.abst)} pessoas</small>
-        </div>
-      </div>
-      <p className="destaque">
-        Diferença: <strong>{fInt(Math.abs(r.margem))} votos</strong> ({r.margem < 0 ? "oponente à frente" : "Lula à frente"}). Votos fora dos dois principais candidatos: <strong>{fInt(r.outros)}</strong>; brancos e nulos:{" "}
-        <strong>{fInt(r.brancosNulos)}</strong>; abstenções: <strong>{fInt(meta.nacional.abst)}</strong>.
+      <h2>Candidatos no Brasil</h2>
+      <p className="nota">
+        % dos votos válidos no 1º turno. Votos fora dos dois principais: <strong>{fInt(r.outros)}</strong> · brancos e nulos: <strong>{fInt(r.brancosNulos)}</strong>.
       </p>
-
       <div className="acoes-painel" role="toolbar" aria-label="Ações e compartilhamento nacional">
         <button
           type="button"

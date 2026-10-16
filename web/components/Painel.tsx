@@ -315,9 +315,7 @@ function linhas(d: Detalhe) {
   const lulaPct = (k: EKey) => (d.eleicoes[k] ? resumo(d.eleicoes[k]!).lulaPct : null);
   return [
     { rotulo: "Lula (% válidos)", vals: get((a) => fPct(resumo(a).lulaPct)) },
-    { rotulo: "Lula (votos)", vals: get((a) => fInt(resumo(a).lula)) },
     { rotulo: "Oponente (% válidos)", vals: get((a) => fPct(resumo(a).oponentePct)) },
-    { rotulo: "Oponente (votos)", vals: get((a) => fInt(resumo(a).oponente)) },
     { rotulo: "Abstenção", vals: get((a) => fPct(resumo(a).abstPct)) },
     { rotulo: "Brancos + nulos (% comparec.)", vals: get((a) => fPct(pct(a.brancos + a.nulos, a.comp))) },
     {

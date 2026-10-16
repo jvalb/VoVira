@@ -84,7 +84,6 @@ export default function Ranking({ onSelect }: { onSelect: (codigo: string) => vo
 
   return (
     <div className="painel-conteudo">
-      <h2>Onde atuar</h2>
       <p className="nota">
         Na eleição presidencial vale o <strong>total nacional de votos</strong>: virar um município não vale mais que somar votos. Estas listas mostram onde há mais votos em jogo, com hipóteses explícitas.
       </p>
