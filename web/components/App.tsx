@@ -33,6 +33,7 @@ export default function App({ nacional }: { nacional: NacionalProps }) {
   const [aba, setAba] = useState<Aba>("local");
   const [foco, setFoco] = useState<{ codigo: string; n: number } | null>(null);
   const [dias, setDias] = useState<number | null>(null);
+  const [noMapa, setNoMapa] = useState(false);
 
   useEffect(() => {
     fetch("/api/resumo")
@@ -67,6 +68,19 @@ export default function App({ nacional }: { nacional: NacionalProps }) {
     window.addEventListener("popstate", onPopState);
     return () => window.removeEventListener("popstate", onPopState);
   }, []);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const el = document.getElementById("mapa");
+      if (el) setNoMapa(window.scrollY >= el.offsetTop - 72 - window.innerHeight * 0.4);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const secao = !noMapa ? "inicio" : aba === "local" ? "mapa" : aba;
+  const cur = (k: string) => ({ className: secao === k ? "ativo" : undefined, "aria-current": secao === k ? ("true" as const) : undefined });
 
   const metric = metricByKey(metricKey);
 
@@ -109,16 +123,16 @@ export default function App({ nacional }: { nacional: NacionalProps }) {
           Vo<span>Vira</span>
         </button>
         <nav className="menu" aria-label="Principal">
-          <button type="button" className="ativo" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
+          <button type="button" {...cur("inicio")} onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
             <i>01</i>Início
           </button>
-          <button type="button" onClick={() => irPara("local")}>
+          <button type="button" {...cur("mapa")} onClick={() => irPara("local")}>
             <i>02</i>Mapa
           </button>
-          <button type="button" onClick={() => irPara("atuar")}>
+          <button type="button" {...cur("atuar")} onClick={() => irPara("atuar")}>
             <i>03</i>Onde atuar
           </button>
-          <button type="button" onClick={() => irPara("praticas")}>
+          <button type="button" {...cur("praticas")} onClick={() => irPara("praticas")}>
             <i>04</i>Boas práticas
           </button>
           <Link href="/fontes">
