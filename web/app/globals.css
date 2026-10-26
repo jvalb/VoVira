@@ -438,7 +438,7 @@ select, input[type="search"] { border: 2px solid var(--preto); border-radius: 0;
 .proposta-topo { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
 .proposta-num { font-family: var(--display); font-size: 2rem; line-height: 1; color: var(--vermelho); margin-right: .2rem; }
 .proposta-eixo { font-size: .7rem; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; background: var(--fundo); border: 1.5px solid var(--preto); padding: .2rem .45rem; }
-.proposta-status { margin-left: auto; font-size: .68rem; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; border: 2px solid var(--preto); padding: .22rem .5rem; cursor: pointer; }
+.proposta-status { margin-left: auto; font-size: .68rem; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; border: 2px solid var(--preto); padding: .22rem .5rem; user-select: none; }
 .badge-cumprida { background: #1f7a4d; color: #fff; border-color: #0f4a2d; }
 .badge-andamento { background: var(--vermelho-claro); color: var(--vermelho-esc); border-color: var(--vermelho); }
 .badge-nao_iniciada { background: #ece6e4; color: var(--preto); }
