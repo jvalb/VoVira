@@ -7,26 +7,25 @@ import { METRICS, MetricKey, ResumoApi, metricByKey } from "@/lib/client-data";
 import { RegiaoComparativo } from "@/lib/regioes";
 import { ELECTION_LABEL, EKey, Agg, Meta } from "@/lib/types";
 import Busca from "./Busca";
-import BoasPraticas from "./BoasPraticas";
 import ComparativoRegional from "./ComparativoRegional";
 import EsquerdaRadical from "./EsquerdaRadical";
 import Hero, { Destino } from "./Hero";
 import MonitorPropostas from "./MonitorPropostas";
 import Nacional from "./Nacional";
 import Painel from "./Painel";
-import Ranking from "./Ranking";
 
 const MapView = dynamic(() => import("./MapView"), { ssr: false, loading: () => <div className="mapa-msg">Carregando mapa…</div> });
 
-type Aba = "local" | "atuar" | "praticas";
-type SecaoAtiva = "inicio" | "propostas" | "regioes" | "esquerda" | "mapa" | "atuar" | "praticas";
+type SecaoAtiva = "inicio" | "propostas" | "regioes" | "esquerda" | "mapa";
 
 const SEGUNDO_TURNO = new Date("2026-10-25T00:00:00-03:00");
 
 export interface NacionalProps {
   nacional: Agg;
+  nacional2T: Agg;
   candidatos: Meta["candidatos"]["2026t1"];
   totalizacao: string;
+  totalizacao2T: string;
   municipiosMapeados?: number;
 }
 
@@ -42,10 +41,9 @@ export default function App({
   const [eleicao, setEleicao] = useState<EKey>("2026t1");
   const [metricKey, setMetricKey] = useState<MetricKey>("margem");
   const [codigo, setCodigo] = useState<string | null>(null);
-  const [aba, setAba] = useState<Aba>("local");
   const [foco, setFoco] = useState<{ codigo: string; n: number } | null>(null);
   const [dias, setDias] = useState<number | null>(null);
-  const [secaoScroll, setSecaoScroll] = useState<"inicio" | "propostas" | "regioes" | "esquerda" | "mapa">("inicio");
+  const [secao, setSecao] = useState<SecaoAtiva>("inicio");
 
   useEffect(() => {
     fetch("/api/resumo")
@@ -54,14 +52,9 @@ export default function App({
         setResumo(j);
         if (typeof window !== "undefined") {
           const params = new URLSearchParams(window.location.search);
-          const initialAba = params.get("aba");
-          if (initialAba === "atuar" || initialAba === "praticas" || initialAba === "local") {
-            setAba(initialAba);
-          }
           const initialCode = params.get("m");
           if (initialCode && j.municipios[initialCode]) {
             setCodigo(initialCode);
-            setAba("local");
             setFoco({ codigo: initialCode, n: 1 });
           }
         }
@@ -75,7 +68,6 @@ export default function App({
       const m = params.get("m");
       if (m) {
         setCodigo(m);
-        setAba("local");
         setFoco((f) => ({ codigo: m, n: (f?.n ?? 0) + 1 }));
       } else {
         setCodigo(null);
@@ -88,7 +80,7 @@ export default function App({
   useEffect(() => {
     const onScroll = () => {
       const y = window.scrollY + 110 + window.innerHeight * 0.25;
-      const ids: Array<{ id: string; sec: "propostas" | "regioes" | "esquerda" | "mapa" }> = [
+      const ids: Array<{ id: string; sec: SecaoAtiva }> = [
         { id: "mapa", sec: "mapa" },
         { id: "esquerda", sec: "esquerda" },
         { id: "regioes", sec: "regioes" },
@@ -97,19 +89,17 @@ export default function App({
       for (const item of ids) {
         const el = document.getElementById(item.id);
         if (el && y >= el.offsetTop) {
-          setSecaoScroll(item.sec);
+          setSecao(item.sec);
           return;
         }
       }
-      setSecaoScroll("inicio");
+      setSecao("inicio");
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const secao: SecaoAtiva =
-    secaoScroll === "mapa" ? (aba === "local" ? "mapa" : aba) : secaoScroll;
   const cur = (k: SecaoAtiva) => ({
     className: secao === k ? "ativo" : undefined,
     "aria-current": secao === k ? ("true" as const) : undefined,
@@ -119,7 +109,6 @@ export default function App({
 
   const abrir = useCallback((c: string, zoom: boolean) => {
     setCodigo(c);
-    setAba("local");
     if (zoom) setFoco((f) => ({ codigo: c, n: (f?.n ?? 0) + 1 }));
     if (typeof window !== "undefined") {
       const url = new URL(window.location.href);
@@ -150,7 +139,6 @@ export default function App({
       rolarPara(d);
       return;
     }
-    setAba(d);
     rolarPara("mapa");
   };
 
@@ -176,21 +164,20 @@ export default function App({
           <button type="button" {...cur("esquerda")} onClick={() => rolarPara("esquerda")}>
             <i>04</i>Nova Esquerda
           </button>
-          <button type="button" {...cur("mapa")} onClick={() => irPara("local")}>
+          <button type="button" {...cur("mapa")} onClick={() => rolarPara("mapa")}>
             <i>05</i>Mapa
           </button>
-          <button type="button" {...cur("atuar")} onClick={() => irPara("atuar")}>
-            <i>06</i>Onde atuar
-          </button>
           <Link href="/fontes">
-            <i>07</i>Fontes
+            <i>06</i>Fontes
           </Link>
         </nav>
       </header>
 
       <Hero
-        nacional={nacional.nacional}
-        totalizacao={nacional.totalizacao}
+        nacional1T={nacional.nacional}
+        nacional2T={nacional.nacional2T}
+        totalizacao1T={nacional.totalizacao}
+        totalizacao2T={nacional.totalizacao2T}
         municipiosMapeados={nacional.municipiosMapeados}
         dias={dias}
         busca={<Busca resumo={resumo} onPick={(c) => { abrir(c, true); rolarPara("mapa"); }} />}
@@ -206,12 +193,12 @@ export default function App({
       <main className="grade" id="mapa">
         <section className="col-mapa" aria-label="Mapa">
           <div className="mapa-cab">
-            <p className="eyebrow eyebrow-esc">05 · Mapa Municipal</p>
-            <h2>Resultado por município</h2>
+            <p className="eyebrow eyebrow-esc">05 · Consulta Direta por Município</p>
+            <h2>Mapa Eleitoral & Indicadores</h2>
           </div>
           <div className="controles">
             <label>
-              Mostrar
+              Camada do mapa
               <select value={metricKey} onChange={(e) => setMetricKey(e.target.value as MetricKey)}>
                 {METRICS.map((m) => (
                   <option key={m.key} value={m.key}>
@@ -221,7 +208,7 @@ export default function App({
               </select>
             </label>
             <label>
-              Eleição
+              Recorte municipal
               <select value={metric.fixaEleicao ? "2026t1" : eleicao} disabled={metric.fixaEleicao} onChange={(e) => setEleicao(e.target.value as EKey)}>
                 {(Object.keys(ELECTION_LABEL) as EKey[]).map((k) => (
                   <option key={k} value={k}>
@@ -230,43 +217,30 @@ export default function App({
                 ))}
               </select>
             </label>
-            <p className="nota">{metric.desc}</p>
+            <div className="campo">
+              <span>Buscar cidade</span>
+              <Busca resumo={resumo} onPick={(c) => abrir(c, true)} />
+            </div>
           </div>
           {erro && <p className="erro">Falha ao carregar dados: {erro}</p>}
           <MapView resumo={resumo} eleicao={metric.fixaEleicao ? "2026t1" : eleicao} metric={metric} selecionado={codigo} foco={foco} onSelect={(c) => abrir(c, false)} />
-          <p className="nota rodape-mapa">
-            Cada polígono é um município; a área não é proporcional ao número de eleitores. Clique para abrir a localidade.
-          </p>
         </section>
 
-        <aside className="col-painel" aria-label="Detalhes">
-          <nav className="abas" role="tablist" aria-label="Seções">
-            <button role="tab" aria-selected={aba === "local"} onClick={() => setAba("local")}>
-              {codigo ? "Localidade" : "Brasil"}
-            </button>
-            <button role="tab" aria-selected={aba === "atuar"} onClick={() => setAba("atuar")}>
-              Onde atuar
-            </button>
-            <button role="tab" aria-selected={aba === "praticas"} onClick={() => setAba("praticas")}>
-              Boas práticas
-            </button>
-          </nav>
-          {aba === "local" && codigo && (
-            <>
-              <button className="voltar" onClick={voltarBrasil}>
-                ← Ver Brasil
+        <aside className="col-painel" aria-label="Resumo da localidade">
+          <div className="painel-topo-barra">
+            <span>{codigo ? "Ficha Municipal" : "Panorama Nacional"}</span>
+            {codigo && (
+              <button type="button" className="voltar-topo" onClick={voltarBrasil}>
+                ← Voltar ao Brasil
               </button>
-              <Painel codigo={codigo} />
-            </>
-          )}
-          {aba === "local" && !codigo && <Nacional meta={nacional} />}
-          {aba === "atuar" && <Ranking onSelect={(c) => abrir(c, true)} />}
-          {aba === "praticas" && <BoasPraticas />}
+            )}
+          </div>
+          {codigo ? <Painel codigo={codigo} /> : <Nacional meta={nacional} />}
         </aside>
       </main>
 
       <footer className="rodape">
-        Dados: TSE (Dados Abertos) e IBGE, sem alteração; percentuais calculados na hora.{" "}
+        Dados: TSE (Dados Abertos + API Oficial Eleição 6258) e IBGE, sem alteração; percentuais calculados na hora.{" "}
         <Link href="/fontes">Fontes, metodologia e verificação (SHA-256)</Link>.
       </footer>
     </div>

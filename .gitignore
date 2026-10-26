@@ -14,6 +14,7 @@ data/work/
 data/raw/*
 !data/raw/MANIFEST.json
 !data/raw/SHA256SUMS.txt
+!data/raw/tse_2026t2_uf_br.json
 !data/certs/ibge-intermediate.pem
 
 # Scratch & Logs

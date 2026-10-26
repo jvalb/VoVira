@@ -1,9 +1,11 @@
-import { ReactNode } from "react";
+"use client";
+
+import { ReactNode, useState } from "react";
 import { resumo } from "@/lib/metrics";
-import { fInt, fPct } from "@/lib/format";
+import { fInt, fPct, fPp } from "@/lib/format";
 import { Agg } from "@/lib/types";
 
-export type Destino = "local" | "atuar" | "praticas" | "propostas" | "regioes" | "esquerda";
+export type Destino = "local" | "propostas" | "regioes" | "esquerda";
 
 interface Trilha {
   n: string;
@@ -22,7 +24,7 @@ const TRILHAS: Trilha[] = [
   {
     n: "02",
     titulo: "Comparativo regional",
-    desc: "Analise a evolução dos votos entre o 1º e o 2º turno nas 5 macrorregiões e nos 27 estados.",
+    desc: "Analise a virada entre o 1º e o 2º turno de 2026 nas 5 macrorregiões e nos 27 estados.",
     destino: "regioes",
   },
   {
@@ -34,32 +36,38 @@ const TRILHAS: Trilha[] = [
   {
     n: "04",
     titulo: "Mapa por município",
-    desc: "Explore os votos oficiais do TSE nos 5.571 municípios e zonas eleitorais com indicadores do IBGE.",
+    desc: "Consulte de forma direta os votos oficiais do TSE e os indicadores do IBGE em cada cidade.",
     destino: "local",
   },
 ];
 
-/**
- * Landing do VoVira — Edição Especial de Reeleição e Monitoramento Popular.
- * Mantém a estrutura visual editorial (background fotográfico, card vertical translúcido e placar de 3 itens)
- * celebrando a vitória democrática de Luiz Inácio Lula da Silva e abrindo as novas frentes de acompanhamento.
- */
 export default function Hero({
-  nacional,
-  totalizacao,
+  nacional1T,
+  nacional2T,
+  totalizacao1T,
+  totalizacao2T,
   municipiosMapeados = 5571,
   dias,
   busca,
   onIr,
 }: {
-  nacional: Agg;
-  totalizacao: string;
+  nacional1T: Agg;
+  nacional2T: Agg;
+  totalizacao1T: string;
+  totalizacao2T: string;
   municipiosMapeados?: number;
   dias: number | null;
   busca: ReactNode;
   onIr: (d: Destino) => void;
 }) {
-  const r = resumo(nacional);
+  const [turnoHero, setTurnoHero] = useState<"2t" | "1t">("2t");
+  const atual = turnoHero === "2t" ? nacional2T : nacional1T;
+  const r = resumo(atual);
+  const r1 = resumo(nacional1T);
+  const r2 = resumo(nacional2T);
+  const saltoLula = r2.lula - r1.lula;
+  const saltoPp = (r2.lulaPct ?? 0) - (r1.lulaPct ?? 0);
+
   return (
     <>
       <section className="hero" aria-labelledby="hero-titulo">
@@ -72,18 +80,20 @@ export default function Hero({
             <br />
             <span className="hero-marca">Lula.</span>
           </h1>
-          <p className="hero-sub">A soberania popular venceu. Agora começa o monitoramento popular e o avanço das conquistas.</p>
+          <p className="hero-sub">
+            Com 64.256.232 votos (51,79%), o Brasil virou o jogo no 2º turno e reafirmou a soberania popular.
+          </p>
           <p className="hero-apoio">
-            O povo brasileiro reafirmou nas urnas a defesa da democracia, dos direitos trabalhistas e da justiça social. O VoVira acompanha cada compromisso assumido, compara o voto nas regiões e apresenta as lideranças que renovam a esquerda brasileira.
+            Lula somou +{fInt(saltoLula)} novos votos no 2º turno ({fPp(saltoPp)}) e venceu com {fInt(Math.abs(r2.margem))} votos de frente. Agora o VoVira monitora cada proposta de campanha, compara os turnos por região e destaca a renovação da esquerda brasileira.
           </p>
           <div className="hero-acoes">
             <button type="button" className="cta" onClick={() => onIr("propostas")}>
               Monitorar propostas <span aria-hidden="true">↓</span>
             </button>
-            <button type="button" className="cta cta-sec" onClick={() => onIr("local")}>
-              Abrir mapa <span aria-hidden="true">→</span>
+            <button type="button" className="cta cta-sec" onClick={() => onIr("regioes")}>
+              Ver virada por região <span aria-hidden="true">→</span>
             </button>
-            <span className="selo">Lula reeleito</span>
+            <span className="selo">51,79% · Eleito</span>
           </div>
           <div className="hero-busca">{busca}</div>
         </div>
@@ -104,10 +114,10 @@ export default function Hero({
               <>
                 <span className="hc-topo">Reeleito</span>
                 <strong>13</strong>
-                <span className="hc-unid">Lula</span>
+                <span className="hc-unid">51,79%</span>
                 <span className="hc-rodape">
-                  Vitória
-                  <small>2027–30</small>
+                  2º turno
+                  <small>25 · out</small>
                 </span>
               </>
             )}
@@ -135,9 +145,9 @@ export default function Hero({
         <div className="parabens-conteudo">
           <div className="parabens-esq">
             <p className="eyebrow eyebrow-esc">01 · Homenagem & Compromisso</p>
-            <h2 id="parabens-titulo">Uma vitória histórica construída voto a voto, cidade por cidade</h2>
+            <h2 id="parabens-titulo">Uma virada histórica de +10,37 milhões de votos no 2º turno</h2>
             <p>
-              Parabenizamos o presidente <strong>Luiz Inácio Lula da Silva</strong> e os milhões de brasileiras e brasileiros que defenderam nas urnas um projeto de país soberano, inclusivo e comprometido com quem vive do próprio trabalho. A reeleição consolida a reconstrução das políticas sociais e abre a tarefa histórica de aprofundar mudanças estruturais.
+              Parabenizamos o presidente <strong>Luiz Inácio Lula da Silva</strong> e os <strong>{fInt(r2.lula)}</strong> eleitores e eleitoras que garantiram a vitória democrática em 25 de outubro de 2026. A queda de quase 3 milhões na abstenção e a mobilização popular reverteram o placar do 1º turno e abriram um novo ciclo de conquistas sociais.
             </p>
           </div>
           <ul className="parabens-pilares">
@@ -157,15 +167,30 @@ export default function Hero({
         </div>
       </section>
 
-      <section className="numeros" aria-label="Resultado nacional do 1º turno">
+      <section className="numeros" aria-label="Resultado nacional oficial de 2026">
         <div className="numeros-cab">
-          <p className="eyebrow eyebrow-esc">Os números da base oficial</p>
-          <p className="numeros-nota">1º turno 2026, totalização do TSE em {totalizacao}. Percentuais calculados na hora a partir dos votos oficiais.</p>
+          <div>
+            <p className="eyebrow eyebrow-esc">Os números oficiais (TSE)</p>
+            <p className="numeros-nota">
+              {turnoHero === "2t"
+                ? `2º turno 2026 (Eleição 6258), totalização oficial do TSE em ${totalizacao2T}.`
+                : `1º turno 2026 (Eleição 6257), totalização oficial do TSE em ${totalizacao1T}.`}{" "}
+              Percentuais calculados na hora a partir dos inteiros oficiais.
+            </p>
+          </div>
+          <div className="seletor" role="group" aria-label="Selecionar turno nacional">
+            <button type="button" aria-pressed={turnoHero === "2t"} onClick={() => setTurnoHero("2t")}>
+              2º Turno 2026 (Resultado Final)
+            </button>
+            <button type="button" aria-pressed={turnoHero === "1t"} onClick={() => setTurnoHero("1t")}>
+              1º Turno 2026
+            </button>
+          </div>
         </div>
         <ul className="numeros-grade">
           <li className="num-lula">
             <strong>{fPct(r.lulaPct)}</strong>
-            <span>Lula</span>
+            <span>Lula {turnoHero === "2t" ? "· Eleito" : ""}</span>
             <small>{fInt(r.lula)} votos</small>
           </li>
           <li className="num-flavio">
@@ -176,12 +201,12 @@ export default function Hero({
           <li className="num-abst">
             <strong>{fPct(r.abstPct)}</strong>
             <span>Abstenção</span>
-            <small>{fInt(nacional.abst)} pessoas</small>
+            <small>{fInt(atual.abst)} pessoas</small>
           </li>
           <li className="num-dif">
             <strong>{fInt(Math.abs(r.margem))}</strong>
             <span>Diferença em votos</span>
-            <small>{r.margem < 0 ? "1º turno · disputa revertida no 2º turno" : "Lula à frente"}</small>
+            <small>{r.margem >= 0 ? `Lula à frente (${fPp(r.margemPp)})` : `1º turno (${fPp(r.margemPp)})`}</small>
           </li>
         </ul>
       </section>

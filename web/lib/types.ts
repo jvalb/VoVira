@@ -1,4 +1,5 @@
 export type EKey = "2022t1" | "2022t2" | "2026t1";
+export type EKeyNacional = EKey | "2026t2";
 
 export const ELECTION_LABEL: Record<EKey, string> = {
   "2022t1": "1º turno 2022",
@@ -39,12 +40,15 @@ export interface Referencia {
 
 export interface Meta {
   gerado_em_utc: string;
-  eleicoes: Record<EKey, string>;
-  candidatos: Record<EKey, Record<string, { nome: string; partido: string }>>;
-  tse_arquivos: Record<EKey, { geracao: string; ultima_totalizacao: string }>;
-  nacional: Record<EKey, Agg>;
+  eleicoes: Record<EKey, string> & Partial<Record<"2026t2", string>>;
+  candidatos: Record<EKey, Record<string, { nome: string; partido: string }>> &
+    Partial<Record<"2026t2", Record<string, { nome: string; partido: string }>>>;
+  tse_arquivos: Record<EKey, { geracao: string; ultima_totalizacao: string }> &
+    Partial<Record<"2026t2", { geracao: string; ultima_totalizacao: string }>>;
+  nacional: Record<EKey, Agg> & Partial<Record<"2026t2", Agg>>;
+  ufs_2026t2?: Record<string, Agg>;
   referencias: { BR: Referencia; UF: Record<string, Referencia> };
-  exterior: Partial<Record<EKey, Agg>>;
+  exterior: Partial<Record<EKeyNacional, Agg>>;
   fontes: Record<string, { url: string; sha256: string; coletado_utc: string }>;
   formulas: Record<string, string>;
   validacoes: Record<string, boolean | number>;

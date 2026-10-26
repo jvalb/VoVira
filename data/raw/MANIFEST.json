@@ -70,5 +70,11 @@
     "retrieved_utc": "2026-10-16T01:55:05.525590+00:00",
     "bytes": 695125,
     "sha256": "8391d732f7af65488734e9b5e04127fc5c0343487eb70b800c8b860fbb1424ed"
+  },
+  "tse_2026t2_uf_br.json": {
+    "url": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/br/br-c0001-e006258-u.json",
+    "retrieved_utc": "2026-10-26T19:18:23.485912+00:00",
+    "bytes": 8004,
+    "sha256": "a59f4cc5e99e41a3bdef34df0ecc9cbf446c534028f4e7a92136c4a911875f47"
   }
 }

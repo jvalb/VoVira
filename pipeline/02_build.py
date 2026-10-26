@@ -350,16 +350,31 @@ def main():
     (OUT / "malha.geojson").write_text(json.dumps({"type": "FeatureCollection", "features": feats}, separators=(",", ":")))
 
     manifest = json.loads((RAW / "MANIFEST.json").read_text())
+    t2_path = RAW / "tse_2026t2_uf_br.json"
+    ufs_2026t2 = {}
+    if t2_path.exists():
+        t2_data = json.loads(t2_path.read_text())
+        cands["2026t2"] = {k: {"nome": v["nome"], "partido": v["partido"]} for k, v in t2_data["candidatos"].items()}
+        meta_tse["2026t2"] = {"geracao": t2_data["geracao"], "ultima_totalizacao": t2_data["ultima_totalizacao"]}
+        nac["2026t2"] = {k: v for k, v in t2_data["nacional"].items() if k != "aptos_apurados"}
+        exterior["2026t2"] = {k: v for k, v in t2_data["exterior"].items() if k != "aptos_apurados"}
+        ufs_2026t2 = {
+            uf: {k: v for k, v in agg.items() if k != "aptos_apurados"}
+            for uf, agg in t2_data["ufs"].items()
+        }
+
     meta = {
         "gerado_em_utc": datetime.now(timezone.utc).isoformat(),
         "eleicoes": {
             "2022t1": "Presidente — 1º turno 2022 (02/10/2022)",
             "2022t2": "Presidente — 2º turno 2022 (30/10/2022)",
             "2026t1": "Presidente — 1º turno 2026 (04/10/2026)",
+            "2026t2": "Presidente — 2º turno 2026 (25/10/2026)",
         },
         "candidatos": cands,
         "tse_arquivos": meta_tse,
         "nacional": nac,
+        "ufs_2026t2": ufs_2026t2,
         "referencias": referencias,
         "exterior": exterior,
         "fontes": {k: {"url": v["url"], "sha256": v["sha256"], "coletado_utc": v["retrieved_utc"]} for k, v in manifest.items()},

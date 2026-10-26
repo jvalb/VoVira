@@ -21,21 +21,22 @@ const PRINCIPIOS = [
     n: "03",
     titulo: "Validação cruzada obrigatória",
     texto:
-      "O processamento falha se alguma checagem não passar: soma dos votos por candidato igual aos votos nominais válidos em cada zona; válidos + brancos + nulos igual ao comparecimento; correspondência unívoca entre códigos TSE e IBGE.",
+      "O processamento falha se alguma checagem não passar: soma dos votos por candidato igual aos votos nominais válidos; válidos + brancos + nulos igual ao comparecimento; correspondência unívoca entre códigos TSE e IBGE.",
   },
   {
     n: "04",
     titulo: "Reprodução integral dos totais",
     texto:
-      "Os totais nacionais calculados reproduzem exatamente os resultados oficiais divulgados pelo TSE (ex.: 2022, 1º turno: Lula 57.259.504 votos; 2º turno: 60.345.999 votos).",
+      "Os totais nacionais e estaduais reproduzem exatamente os resultados oficiais divulgados pelo TSE (2026, 2º turno: Lula 64.256.232 votos vs 59.826.041 votos; 1º turno: 53.879.538 votos; 2022, 2º turno: 60.345.999 votos).",
   },
 ];
 
 const LIMITES = [
   {
     n: "01",
-    titulo: "Dados de 2026 referentes ao 1º turno",
-    texto: "O 2º turno de 2026 ainda não aconteceu: os números de 2026 exibidos no painel referem-se ao resultado oficial do 1º turno (04/10/2026).",
+    titulo: "2º Turno 2026 (Eleição 6258) e granulosidade",
+    texto:
+      "Os resultados oficiais do 2º turno de 2026 (25/10/2026) são extraídos diretamente da API oficial do TSE (resultados.tse.jus.br, eleição 6258) para o Brasil, Exterior e todas as 27 Unidades da Federação (e 5 macrorregiões). No mapa municipal por zona, os polígonos exibem as séries municipais consolidadas de 2022 (1º e 2º turnos) e 2026 (1º turno).",
   },
   {
     n: "02",
@@ -54,16 +55,11 @@ const LIMITES = [
   },
   {
     n: "05",
-    titulo: "Simulador baseado em hipóteses do usuário",
-    texto: "O simulador aplica matematicamente as porcentagens escolhidas nos controles deslizantes sobre os votos do 1º turno. Não é pesquisa eleitoral nem previsão.",
-  },
-  {
-    n: "06",
     titulo: "Município recém-instalado (MT)",
     texto: "Boa Esperança do Norte (MT) é município novo: ainda não possui polígono separado na malha vigente do IBGE nem série histórica própria de 2022 ou Censo 2022.",
   },
   {
-    n: "07",
+    n: "06",
     titulo: "Votos no exterior (ZZ)",
     texto: "Os votos registrados em seções no exterior entram integralmente nos totais nacionais do TSE, mas não pertencem a nenhum município brasileiro no mapa.",
   },
@@ -88,17 +84,20 @@ export default function Fontes() {
           <Link href="/">
             <i>01</i>Início
           </Link>
+          <Link href="/#propostas">
+            <i>02</i>Propostas
+          </Link>
+          <Link href="/#regioes">
+            <i>03</i>Regiões
+          </Link>
+          <Link href="/#esquerda">
+            <i>04</i>Nova Esquerda
+          </Link>
           <Link href="/#mapa">
-            <i>02</i>Mapa
-          </Link>
-          <Link href="/?aba=atuar#mapa">
-            <i>03</i>Onde atuar
-          </Link>
-          <Link href="/?aba=praticas#mapa">
-            <i>04</i>Boas práticas
+            <i>05</i>Mapa
           </Link>
           <Link href="/fontes" className="ativo" aria-current="page">
-            <i>05</i>Fontes
+            <i>06</i>Fontes
           </Link>
         </nav>
       </header>
@@ -106,7 +105,7 @@ export default function Fontes() {
       <main id="conteudo-fontes">
         <section className="fontes-hero" aria-labelledby="fontes-titulo">
           <div className="fontes-hero-esq">
-            <p className="eyebrow">05 · Transparência e verificação pública</p>
+            <p className="eyebrow">06 · Transparência e verificação pública</p>
             <h1 id="fontes-titulo">
               Fontes e
               <br />
@@ -115,7 +114,7 @@ export default function Fontes() {
             <p className="hero-sub">Cada número tem documento de origem, fórmula aberta e hash de integridade.</p>
             <p className="hero-apoio">
               Nenhum dado bruto do TSE ou do IBGE é alterado. Resultado desta versão:{" "}
-              <strong>{fInt(Number(meta.validacoes.municipios_tse_mapeados))} municípios mapeados, todas as validações aprovadas</strong>.
+              <strong>{fInt(Number(meta.validacoes.municipios_tse_mapeados))} municípios mapeados, 2º turno 2026 integrado e todas as validações aprovadas</strong>.
             </p>
             <div className="hero-acoes">
               <Link href="/#mapa" className="cta">
@@ -197,8 +196,8 @@ export default function Fontes() {
               <h2 id="arquivos-t">Arquivos de origem</h2>
             </div>
             <p className="numeros-nota">
-              Totalização TSE (1º turno 2026): <strong>{meta.tse_arquivos["2026t1"].ultima_totalizacao}</strong>. Pipeline processado em{" "}
-              <strong>{meta.gerado_em_utc}</strong>.
+              Totalização TSE: 2º turno 2026 em <strong>{meta.tse_arquivos["2026t2"]?.ultima_totalizacao}</strong> · 1º turno 2026 em{" "}
+              <strong>{meta.tse_arquivos["2026t1"].ultima_totalizacao}</strong>.
             </p>
           </div>
 
@@ -234,7 +233,7 @@ export default function Fontes() {
       </main>
 
       <footer className="rodape">
-        Dados: TSE (Dados Abertos) e IBGE, sem alteração; percentuais calculados na hora.{" "}
+        Dados: TSE (Dados Abertos + API Oficial Eleição 6258) e IBGE, sem alteração; percentuais calculados na hora.{" "}
         <Link href="/#mapa">Voltar ao mapa interativo</Link>.
       </footer>
     </div>

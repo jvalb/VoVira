@@ -3,9 +3,9 @@
 import { useState } from "react";
 import { fInt, fPct, fPp } from "@/lib/format";
 import { DadosTurno, RegiaoComparativo, RegiaoId } from "@/lib/regioes";
-import { EKey } from "@/lib/types";
+import { EKeyNacional } from "@/lib/types";
 
-type ModoComparativo = "t1_t2_2022" | "t1_2022_2026";
+type ModoComparativo = "t1_t2_2026" | "t2_2022_2026" | "t1_t2_2022";
 
 function calcMetricas(d: DadosTurno) {
   const lulaPct = d.validos > 0 ? (100 * d.lula) / d.validos : 0;
@@ -17,41 +17,51 @@ function calcMetricas(d: DadosTurno) {
 }
 
 export default function ComparativoRegional({ regioes }: { regioes: RegiaoComparativo[] }) {
-  const [modo, setModo] = useState<ModoComparativo>("t1_t2_2022");
+  const [modo, setModo] = useState<ModoComparativo>("t1_t2_2026");
   const [regiaoAberta, setRegiaoAberta] = useState<RegiaoId | "Todas">("Todas");
 
-  const chaveBase: EKey = "2022t1";
-  const chaveComp: EKey = modo === "t1_t2_2022" ? "2022t2" : "2026t1";
-  const rotuloBase = modo === "t1_t2_2022" ? "1º Turno (2022)" : "1º Turno (2022)";
-  const rotuloComp = modo === "t1_t2_2022" ? "2º Turno (2022)" : "1º Turno (2026)";
+  const configModo: Record<ModoComparativo, { base: EKeyNacional; comp: EKeyNacional; rBase: string; rComp: string }> = {
+    t1_t2_2026: { base: "2026t1", comp: "2026t2", rBase: "1º Turno (2026)", rComp: "2º Turno (2026)" },
+    t2_2022_2026: { base: "2022t2", comp: "2026t2", rBase: "2º Turno (2022)", rComp: "2º Turno (2026)" },
+    t1_t2_2022: { base: "2022t1", comp: "2022t2", rBase: "1º Turno (2022)", rComp: "2º Turno (2022)" },
+  };
+
+  const { base: chaveBase, comp: chaveComp, rBase: rotuloBase, rComp: rotuloComp } = configModo[modo];
 
   return (
     <section className="secao-editorial secao-escura" id="regioes" aria-labelledby="regioes-titulo">
       <div className="secao-cab">
         <div>
-          <p className="eyebrow">03 · Radiografia Territorial · TSE Oficial</p>
+          <p className="eyebrow">03 · Radiografia Territorial · TSE Oficial (Eleição 6258)</p>
           <h2 id="regioes-titulo">Comparativo por região: 1º e 2º turno</h2>
           <p className="secao-sub secao-sub-esc">
-            Veja como os votos válidos, a vantagem nominal e a taxa de abstenção se comportam entre o 1º e o 2º turno nas 5 macrorregiões do país e nas 27 Unidades da Federação, somados diretamente dos boletins de zona do TSE.
+            Como o Brasil virou o jogo no 2º turno de 2026: Lula cresceu mais de 10,37 milhões de votos entre os dois turnos, ampliou sua liderança histórica no Nordeste, virou a Região Norte e reduziu drasticamente a diferença no Sudeste, Sul e Centro-Oeste.
           </p>
         </div>
 
         <div className="modo-comparativo-box">
-          <span className="filtro-rotulo filtro-rotulo-esc">Recorte eleitoral (TSE)</span>
+          <span className="filtro-rotulo filtro-rotulo-esc">Recorte eleitoral oficial (TSE)</span>
           <div className="seletor seletor-esc">
+            <button
+              type="button"
+              aria-pressed={modo === "t1_t2_2026"}
+              onClick={() => setModo("t1_t2_2026")}
+            >
+              1º vs 2º Turno 2026 (Oficial)
+            </button>
+            <button
+              type="button"
+              aria-pressed={modo === "t2_2022_2026"}
+              onClick={() => setModo("t2_2022_2026")}
+            >
+              2º Turno 2022 vs 2º Turno 2026
+            </button>
             <button
               type="button"
               aria-pressed={modo === "t1_t2_2022"}
               onClick={() => setModo("t1_t2_2022")}
             >
-              1º vs 2º Turno (Ciclo Completo TSE)
-            </button>
-            <button
-              type="button"
-              aria-pressed={modo === "t1_2022_2026"}
-              onClick={() => setModo("t1_2022_2026")}
-            >
-              1º Turno 2022 vs 1º Turno 2026
+              1º vs 2º Turno 2022
             </button>
           </div>
         </div>
@@ -150,9 +160,9 @@ export default function ComparativoRegional({ regioes }: { regioes: RegiaoCompar
       <div className="uf-detalhe-box">
         <div className="uf-detalhe-cab">
           <div>
-            <h3>Detalhamento por Estado (27 UFs · {fInt(5571)} municípios)</h3>
+            <h3>Detalhamento por Estado (27 UFs · Totalização Oficial TSE)</h3>
             <p className="nota" style={{ color: "#d6cfcd", margin: 0 }}>
-              Filtre uma macrorregião para inspecionar a transferência de votos entre {rotuloBase} e {rotuloComp} estado por estado.
+              Filtre uma macrorregião para conferir os votos nominais e a evolução entre {rotuloBase} e {rotuloComp} em cada Unidade da Federação.
             </p>
           </div>
           <div className="seletor seletor-esc">

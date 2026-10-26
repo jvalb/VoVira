@@ -17,6 +17,7 @@ export async function GET(_req: Request, ctx: { params: Promise<{ codigo: string
     indicadores: mun.ind,
     referencias: { BR: meta.referencias.BR.ind, UF: meta.referencias.UF[mun.uf]?.ind ?? null },
     eleicoes: mun.e,
+    uf2026t2: meta.ufs_2026t2?.[mun.uf] ?? null,
     candidatos: meta.candidatos,
     zonas: zonas[codigo] ?? {},
     analise: a26

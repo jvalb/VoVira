@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { agregarPorRegiao } from "./regioes";
-import { Municipio } from "./types";
+import { Agg, Municipio } from "./types";
 
 describe("agregarPorRegiao", () => {
-  it("soma exatamente os inteiros do TSE por UF e macrorregião", () => {
+  it("soma exatamente os inteiros do TSE por UF e macrorregião, incluindo 2026t2", () => {
     const mock: Record<string, Municipio> = {
       "2611606": {
         n: "Recife",
@@ -29,14 +29,17 @@ describe("agregarPorRegiao", () => {
       },
     };
 
-    const regioes = agregarPorRegiao(mock);
+    const ufs2026t2: Record<string, Agg> = {
+      PE: { aptos: 1250, comp: 1080, abst: 170, brancos: 15, nulos: 15, validos: 1050, v: { "13": 650, "22": 400 } },
+      BA: { aptos: 2100, comp: 1750, abst: 350, brancos: 25, nulos: 25, validos: 1700, v: { "13": 1220, "22": 480 } },
+    };
+
+    const regioes = agregarPorRegiao(mock, ufs2026t2);
     const ne = regioes.find((r) => r.id === "Nordeste")!;
     expect(ne.municipios).toBe(2);
     expect(ne.eleicoes["2022t1"].lula).toBe(1600);
-    expect(ne.eleicoes["2022t2"].lula).toBe(1750);
-    expect(ne.eleicoes["2022t2"].validos).toBe(2600);
-
-    const pe = ne.ufs.find((u) => u.uf === "PE")!;
-    expect(pe.eleicoes["2022t2"].lula - pe.eleicoes["2022t1"].lula).toBe(50);
+    expect(ne.eleicoes["2026t1"].lula).toBe(1680);
+    expect(ne.eleicoes["2026t2"].lula).toBe(1870);
+    expect(ne.eleicoes["2026t2"].validos).toBe(2750);
   });
 });
