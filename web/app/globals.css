@@ -168,7 +168,8 @@ select, input[type="search"] { font: inherit; padding: .4rem .5rem; border: 1px 
 .rodape-mapa { margin: 0; }
 
 /* busca */
-.busca { position: relative; min-width: 240px; flex: 0 1 320px; }
+.busca { position: relative; min-width: 240px; width: 100%; }
+.campo .busca { flex: none; width: 280px; }
 .busca input { width: 100%; }
 .busca-lista { position: absolute; z-index: 20; top: 100%; left: 0; right: 0; margin: 2px 0 0; padding: 0; list-style: none; background: #fff; border: 1px solid var(--borda); border-radius: 6px; box-shadow: 0 6px 18px rgba(0,0,0,.15); }
 .busca-lista button { width: 100%; text-align: left; border: 0; background: none; padding: .45rem .6rem; font: inherit; cursor: pointer; }

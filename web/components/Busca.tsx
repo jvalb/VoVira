@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useId, useMemo, useState } from "react";
 import { ResumoApi } from "@/lib/client-data";
 
 function norm(s: string) {
@@ -8,6 +8,9 @@ function norm(s: string) {
 }
 
 export default function Busca({ resumo, onPick }: { resumo: ResumoApi | null; onPick: (codigo: string) => void }) {
+  const uid = useId();
+  const inputId = `busca-in-${uid}`;
+  const listId = `busca-lista-${uid}`;
   const [q, setQ] = useState("");
   const [ativo, setAtivo] = useState(0);
 
@@ -30,11 +33,11 @@ export default function Busca({ resumo, onPick }: { resumo: ResumoApi | null; on
 
   return (
     <div className="busca" role="search">
-      <label htmlFor="busca-in" className="sr-only">
+      <label htmlFor={inputId} className="sr-only">
         Buscar município
       </label>
       <input
-        id="busca-in"
+        id={inputId}
         type="search"
         placeholder="Buscar município…"
         autoComplete="off"
@@ -42,7 +45,7 @@ export default function Busca({ resumo, onPick }: { resumo: ResumoApi | null; on
         disabled={!resumo}
         role="combobox"
         aria-expanded={res.length > 0}
-        aria-controls="busca-lista"
+        aria-controls={listId}
         onChange={(e) => {
           setQ(e.target.value);
           setAtivo(0);
@@ -60,10 +63,10 @@ export default function Busca({ resumo, onPick }: { resumo: ResumoApi | null; on
         }}
       />
       {res.length > 0 && (
-        <ul id="busca-lista" role="listbox" className="busca-lista">
+        <ul id={listId} role="listbox" className="busca-lista">
           {res.map((x, i) => (
             <li key={x.c} role="option" aria-selected={i === ativo}>
-              <button onClick={() => escolher(x.c)} className={i === ativo ? "ativo" : ""}>
+              <button type="button" onClick={() => escolher(x.c)} className={i === ativo ? "ativo" : ""}>
                 {x.n} <small>{x.uf}</small>
               </button>
             </li>
