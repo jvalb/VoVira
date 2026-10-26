@@ -4,10 +4,14 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { METRICS, MetricKey, ResumoApi, metricByKey } from "@/lib/client-data";
+import { RegiaoComparativo } from "@/lib/regioes";
 import { ELECTION_LABEL, EKey, Agg, Meta } from "@/lib/types";
 import Busca from "./Busca";
 import BoasPraticas from "./BoasPraticas";
-import Hero from "./Hero";
+import ComparativoRegional from "./ComparativoRegional";
+import EsquerdaRadical from "./EsquerdaRadical";
+import Hero, { Destino } from "./Hero";
+import MonitorPropostas from "./MonitorPropostas";
 import Nacional from "./Nacional";
 import Painel from "./Painel";
 import Ranking from "./Ranking";
@@ -15,6 +19,7 @@ import Ranking from "./Ranking";
 const MapView = dynamic(() => import("./MapView"), { ssr: false, loading: () => <div className="mapa-msg">Carregando mapa…</div> });
 
 type Aba = "local" | "atuar" | "praticas";
+type SecaoAtiva = "inicio" | "propostas" | "regioes" | "esquerda" | "mapa" | "atuar" | "praticas";
 
 const SEGUNDO_TURNO = new Date("2026-10-25T00:00:00-03:00");
 
@@ -25,7 +30,13 @@ export interface NacionalProps {
   municipiosMapeados?: number;
 }
 
-export default function App({ nacional }: { nacional: NacionalProps }) {
+export default function App({
+  nacional,
+  regioes = [],
+}: {
+  nacional: NacionalProps;
+  regioes?: RegiaoComparativo[];
+}) {
   const [resumo, setResumo] = useState<ResumoApi | null>(null);
   const [erro, setErro] = useState<string | null>(null);
   const [eleicao, setEleicao] = useState<EKey>("2026t1");
@@ -34,7 +45,7 @@ export default function App({ nacional }: { nacional: NacionalProps }) {
   const [aba, setAba] = useState<Aba>("local");
   const [foco, setFoco] = useState<{ codigo: string; n: number } | null>(null);
   const [dias, setDias] = useState<number | null>(null);
-  const [noMapa, setNoMapa] = useState(false);
+  const [secaoScroll, setSecaoScroll] = useState<"inicio" | "propostas" | "regioes" | "esquerda" | "mapa">("inicio");
 
   useEffect(() => {
     fetch("/api/resumo")
@@ -76,16 +87,33 @@ export default function App({ nacional }: { nacional: NacionalProps }) {
 
   useEffect(() => {
     const onScroll = () => {
-      const el = document.getElementById("mapa");
-      if (el) setNoMapa(window.scrollY >= el.offsetTop - 72 - window.innerHeight * 0.4);
+      const y = window.scrollY + 110 + window.innerHeight * 0.25;
+      const ids: Array<{ id: string; sec: "propostas" | "regioes" | "esquerda" | "mapa" }> = [
+        { id: "mapa", sec: "mapa" },
+        { id: "esquerda", sec: "esquerda" },
+        { id: "regioes", sec: "regioes" },
+        { id: "propostas", sec: "propostas" },
+      ];
+      for (const item of ids) {
+        const el = document.getElementById(item.id);
+        if (el && y >= el.offsetTop) {
+          setSecaoScroll(item.sec);
+          return;
+        }
+      }
+      setSecaoScroll("inicio");
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const secao = !noMapa ? "inicio" : aba === "local" ? "mapa" : aba;
-  const cur = (k: string) => ({ className: secao === k ? "ativo" : undefined, "aria-current": secao === k ? ("true" as const) : undefined });
+  const secao: SecaoAtiva =
+    secaoScroll === "mapa" ? (aba === "local" ? "mapa" : aba) : secaoScroll;
+  const cur = (k: SecaoAtiva) => ({
+    className: secao === k ? "ativo" : undefined,
+    "aria-current": secao === k ? ("true" as const) : undefined,
+  });
 
   const metric = metricByKey(metricKey);
 
@@ -113,15 +141,23 @@ export default function App({ nacional }: { nacional: NacionalProps }) {
     }
   }, []);
 
-  const irPara = (d: Aba) => {
+  const rolarPara = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const irPara = (d: Destino) => {
+    if (d === "propostas" || d === "regioes" || d === "esquerda") {
+      rolarPara(d);
+      return;
+    }
     setAba(d);
-    document.getElementById("mapa")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    rolarPara("mapa");
   };
 
   return (
     <div className="app">
-      <a className="pular" href="#mapa">
-        Pular para o mapa
+      <a className="pular" href="#propostas">
+        Pular para o conteúdo
       </a>
       <header className="topo">
         <button type="button" className="logo" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} aria-label="VoVira, voltar ao início">
@@ -131,17 +167,23 @@ export default function App({ nacional }: { nacional: NacionalProps }) {
           <button type="button" {...cur("inicio")} onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
             <i>01</i>Início
           </button>
+          <button type="button" {...cur("propostas")} onClick={() => rolarPara("propostas")}>
+            <i>02</i>Propostas
+          </button>
+          <button type="button" {...cur("regioes")} onClick={() => rolarPara("regioes")}>
+            <i>03</i>Regiões
+          </button>
+          <button type="button" {...cur("esquerda")} onClick={() => rolarPara("esquerda")}>
+            <i>04</i>Nova Esquerda
+          </button>
           <button type="button" {...cur("mapa")} onClick={() => irPara("local")}>
-            <i>02</i>Mapa
+            <i>05</i>Mapa
           </button>
           <button type="button" {...cur("atuar")} onClick={() => irPara("atuar")}>
-            <i>03</i>Onde atuar
-          </button>
-          <button type="button" {...cur("praticas")} onClick={() => irPara("praticas")}>
-            <i>04</i>Boas práticas
+            <i>06</i>Onde atuar
           </button>
           <Link href="/fontes">
-            <i>05</i>Fontes
+            <i>07</i>Fontes
           </Link>
         </nav>
       </header>
@@ -151,14 +193,20 @@ export default function App({ nacional }: { nacional: NacionalProps }) {
         totalizacao={nacional.totalizacao}
         municipiosMapeados={nacional.municipiosMapeados}
         dias={dias}
-        busca={<Busca resumo={resumo} onPick={(c) => abrir(c, true)} />}
+        busca={<Busca resumo={resumo} onPick={(c) => { abrir(c, true); rolarPara("mapa"); }} />}
         onIr={irPara}
       />
+
+      <MonitorPropostas />
+
+      <ComparativoRegional regioes={regioes} />
+
+      <EsquerdaRadical />
 
       <main className="grade" id="mapa">
         <section className="col-mapa" aria-label="Mapa">
           <div className="mapa-cab">
-            <p className="eyebrow eyebrow-esc">02 · Mapa</p>
+            <p className="eyebrow eyebrow-esc">05 · Mapa Municipal</p>
             <h2>Resultado por município</h2>
           </div>
           <div className="controles">

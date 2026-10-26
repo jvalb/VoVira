@@ -1,8 +1,10 @@
 import { store } from "@/lib/data";
+import { agregarPorRegiao } from "@/lib/regioes";
 import App from "@/components/App";
 
 export default function Page() {
-  const { meta } = store();
+  const { meta, municipios } = store();
+  const regioes = agregarPorRegiao(municipios);
   return (
     <App
       nacional={{
@@ -11,6 +13,7 @@ export default function Page() {
         totalizacao: meta.tse_arquivos["2026t1"].ultima_totalizacao,
         municipiosMapeados: Number(meta.validacoes.municipios_tse_mapeados),
       }}
+      regioes={regioes}
     />
   );
 }
