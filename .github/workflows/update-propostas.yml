@@ -1,0 +1,82 @@
+name: Atualizar Monitor de Propostas
+
+on:
+  schedule:
+    # Executa automaticamente todos os dias às 08:00 BRT (11:00 UTC)
+    - cron: "0 11 * * *"
+  workflow_dispatch:
+    inputs:
+      modo:
+        description: "Modo de execução (auto = sincronizar APIs oficiais; manual = editar uma proposta)"
+        required: true
+        default: "auto"
+        type: choice
+        options:
+          - auto
+          - manual
+      proposta_id:
+        description: "[Manual] ID ou número da proposta (ex.: escala-6x1 ou 03)"
+        required: false
+        type: string
+      status:
+        description: "[Manual] Novo status da proposta"
+        required: false
+        type: choice
+        options:
+          - ""
+          - cumprida
+          - andamento
+          - nao_iniciada
+      progresso:
+        description: "[Manual] Novo percentual de execução (0 a 100)"
+        required: false
+        type: string
+      marco:
+        description: "[Manual] Novo texto do marco verificável (opcional)"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  atualizar-propostas:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Sincronizar ou aplicar atualização manual interna
+        env:
+          MODO: ${{ github.event.inputs.modo || 'auto' }}
+          PROP_ID: ${{ github.event.inputs.proposta_id }}
+          PROP_STATUS: ${{ github.event.inputs.status }}
+          PROP_PROG: ${{ github.event.inputs.progresso }}
+          PROP_MARCO: ${{ github.event.inputs.marco }}
+        run: |
+          if [ "$MODO" = "manual" ] && [ -n "$PROP_ID" ]; then
+            ARGS=(--id "$PROP_ID")
+            if [ -n "$PROP_STATUS" ]; then ARGS+=(--status "$PROP_STATUS"); fi
+            if [ -n "$PROP_PROG" ]; then ARGS+=(--progresso "$PROP_PROG"); fi
+            if [ -n "$PROP_MARCO" ]; then ARGS+=(--marco "$PROP_MARCO"); fi
+            python3 pipeline/03_update_propostas.py "${ARGS[@]}"
+          else
+            python3 pipeline/03_update_propostas.py --auto
+          fi
+
+      - name: Commit e Push se houver alterações nas propostas
+        run: |
+          git config user.name "VoVira Bot"
+          git config user.email "actions@github.com"
+          git add web/public/data/propostas.json
+          if git diff --cached --quiet; then
+            echo "Nenhuma alteração nos dados de propostas."
+          else
+            git commit -m "chore(propostas): atualizar status e tramitacao das propostas monitoradas"
+            git push origin main
+          fi

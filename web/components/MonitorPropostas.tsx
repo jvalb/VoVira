@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import propostasData from "@/public/data/propostas.json";
 
 export type EixoProposta =
   | "Economia e Trabalho"
@@ -18,9 +19,18 @@ export interface Proposta {
   eixo: EixoProposta;
   status: StatusProposta;
   progresso: number;
+  regraAutomatica?: "legislativa" | "hibrida";
+  progressoExecucao?: number;
+  overrideManual?: boolean;
   promessa: string;
   metaIndicador: string;
   fonteAcompanhamento: string;
+  camaraId?: number;
+  proposicaoCodigo?: string;
+  urlFonte?: string;
+  situacaoCamara?: string;
+  ultimaTramitacao?: string;
+  dataUltimaTramitacao?: string;
 }
 
 const EIXOS: Array<"Todos" | EixoProposta> = [
@@ -38,155 +48,46 @@ const STATUS_LABEL: Record<StatusProposta, string> = {
   nao_iniciada: "Em articulação",
 };
 
-/**
- * Base oficial interna das propostas monitoradas pelo site.
- * Os status e percentuais de execução são definidos apenas internamente no código/dados do projeto.
- */
-export const PROPOSTAS: Proposta[] = [
-  {
-    id: "ir-5mil",
-    num: "01",
-    titulo: "Isenção de Imposto de Renda até R$ 5 mil e taxação de super-ricos",
-    eixo: "Economia e Trabalho",
-    status: "cumprida",
-    progresso: 100,
-    promessa: "Isentar trabalhadoras e trabalhadores que ganham até R$ 5.000 mensais e compensar com alíquota mínima sobre rendas milionárias, dividendos e offshores.",
-    metaIndicador: "Faixa de isenção efetiva até R$ 5.000/mês + tributação de fundos exclusivos/offshores sancionada.",
-    fonteAcompanhamento: "Ministério da Fazenda / Receita Federal",
-  },
-  {
-    id: "salario-minimo",
-    num: "02",
-    titulo: "Política permanente de valorização real do Salário Mínimo",
-    eixo: "Economia e Trabalho",
-    status: "cumprida",
-    progresso: 100,
-    promessa: "Garantir em lei o reajuste anual do salário mínimo acima da inflação (INPC + crescimento do PIB de dois anos antes), recuperando o poder de compra popular.",
-    metaIndicador: "Lei nº 14.663 sancionada e aplicada nos orçamentos anuais consecutivos.",
-    fonteAcompanhamento: "Ministério do Trabalho e Emprego / DIEESE",
-  },
-  {
-    id: "escala-6x1",
-    num: "03",
-    titulo: "Redução da jornada de trabalho e fim da escala 6x1 sem corte salarial",
-    eixo: "Economia e Trabalho",
-    status: "andamento",
-    progresso: 45,
-    promessa: "Avançar na redução da jornada semanal máxima e na superação da escala 6x1, garantindo tempo de vida, descanso e qualificação para a classe trabalhadora.",
-    metaIndicador: "Tramitação da PEC no Congresso Nacional e mesa nacional de negociação tripartite.",
-    fonteAcompanhamento: "Câmara dos Deputados / Ministério do Trabalho",
-  },
-  {
-    id: "mapa-da-fome",
-    num: "04",
-    titulo: "Brasil fora do Mapa da Fome e Bolsa Família com adicional por criança",
-    eixo: "Social e Saúde",
-    status: "cumprida",
-    progresso: 95,
-    promessa: "Retirar novamente o Brasil do Mapa da Fome da ONU, mantendo o piso de R$ 600 no Bolsa Família mais R$ 150 por criança de até 6 anos e R$ 50 para gestantes e jovens.",
-    metaIndicador: "Queda de 85% na insegurança alimentar grave (IBGE/PNAD e relatório SOFI/FAO).",
-    fonteAcompanhamento: "MDS / IBGE / FAO-ONU",
-  },
-  {
-    id: "especialistas-sus",
-    num: "05",
-    titulo: "Mais Acesso a Especialistas no SUS e expansão do Mais Médicos",
-    eixo: "Social e Saúde",
-    status: "andamento",
-    progresso: 70,
-    promessa: "Zerar filas históricas de exames, cirurgias eletivas e consultas especializadas no SUS com pacotes integrados (OCI) e dobrar a cobertura do Mais Médicos nas periferias.",
-    metaIndicador: "Mais de 28 mil médicos em atuação e rede nacional de exames integrados em implantação.",
-    fonteAcompanhamento: "Ministério da Saúde / DataSUS",
-  },
-  {
-    id: "minha-casa",
-    num: "06",
-    titulo: "Minha Casa, Minha Vida: 2 milhões de novas moradias contratadas",
-    eixo: "Social e Saúde",
-    status: "andamento",
-    progresso: 80,
-    promessa: "Retomar a Faixa 1 para famílias de baixa renda, incluir isenção de prestações para beneficiários do Bolsa Família/BPC e atingir 2 milhões de moradias contratadas.",
-    metaIndicador: "Mais de 1,6 milhão de unidades contratadas com foco na Faixa 1 e requalificação urbana.",
-    fonteAcompanhamento: "Ministério das Cidades / Caixa",
-  },
-  {
-    id: "pe-de-meia",
-    num: "07",
-    titulo: "Programa Pé-de-Meia universalizado e 100 novos Institutos Federais",
-    eixo: "Educação e Ciência",
-    status: "cumprida",
-    progresso: 90,
-    promessa: "Combater a evasão no ensino médio público com poupança estudantil mensal e expandir a rede federal de educação profissional e tecnológica em todas as regiões.",
-    metaIndicador: "Quase 4 milhões de estudantes no Pé-de-Meia e obras dos 100 novos campi de IFs contratadas.",
-    fonteAcompanhamento: "Ministério da Educação (MEC) / FNDE",
-  },
-  {
-    id: "reajuste-ciencia",
-    num: "08",
-    titulo: "Recomposição integral do FNDCT, bolsas de pesquisa e universidades",
-    eixo: "Educação e Ciência",
-    status: "cumprida",
-    progresso: 100,
-    promessa: "Reajustar bolsas da CAPES e CNPq após anos de congelamento, desbloquear 100% do Fundo Nacional de Desenvolvimento Científico e Tecnológico e retomar obras em universidades.",
-    metaIndicador: "Bolsas reajustadas em até 75% e FNDCT operando em sua totalidade sem contingenciamento.",
-    fonteAcompanhamento: "MCTI / CAPES / CNPq",
-  },
-  {
-    id: "desmatamento-zero",
-    num: "09",
-    titulo: "Rumo ao Desmatamento Zero na Amazônia até 2030 e retomada das demarcações",
-    eixo: "Clima e Amazônia",
-    status: "andamento",
-    progresso: 75,
-    promessa: "Reduzir drasticamente o desmatamento ilegal na Amazônia e no Cerrado, fortalecer o IBAMA/ICMBio, reativar o Fundo Amazônia e homologar Terras Indígenas.",
-    metaIndicador: "Queda acumulada superior a 45% no desmatamento da Amazônia (PRODES/INPE) e novas TIs homologadas.",
-    fonteAcompanhamento: "MMA / INPE / Ministério dos Povos Indígenas",
-  },
-  {
-    id: "transicao-ecologica",
-    num: "10",
-    titulo: "Plano de Transformação Ecológica e Neoindustrialização Verde",
-    eixo: "Clima e Amazônia",
-    status: "andamento",
-    progresso: 60,
-    promessa: "Impulsionar o programa Nova Indústria Brasil (NIB) com mercado regulado de carbono, hidrogênio verde, mobilidade elétrica pública e bioeconomia amazônica.",
-    metaIndicador: "Marco do mercado de carbono aprovado e linhas de crédito do BNDES Mais Inovação em operação.",
-    fonteAcompanhamento: "MDIC / BNDES / Ministério da Fazenda",
-  },
-  {
-    id: "cesta-basica-zero",
-    num: "11",
-    titulo: "Reforma Tributária com Cesta Básica Nacional isenta (alíquota zero) e Cashback",
-    eixo: "Democracia e Soberania",
-    status: "cumprida",
-    progresso: 95,
-    promessa: "Regulamentar o IVA dual com imposto zero para os alimentos da Cesta Básica Nacional e devolução de tributos (cashback) na conta de luz, gás e água para famílias de baixa renda.",
-    metaIndicador: "Emenda Constitucional 132 promulgada e leis complementares de cashback e cesta básica aprovadas.",
-    fonteAcompanhamento: "Congresso Nacional / Ministério da Fazenda",
-  },
-  {
-    id: "soberania-digital",
-    num: "12",
-    titulo: "Regulação democrática das plataformas digitais, IA soberana e direitos de entregadores",
-    eixo: "Democracia e Soberania",
-    status: "nao_iniciada",
-    progresso: 30,
-    promessa: "Responsabilizar grandes plataformas digitais contra ataques à democracia, desenvolver infraestrutura pública de IA (Plano Brasileiro de IA) e garantir direitos previdenciários a trabalhadores de aplicativos.",
-    metaIndicador: "PBIA lançado; regulação das big techs e marco dos trabalhadores por plataforma em disputa legislativa.",
-    fonteAcompanhamento: "Secom / MCTI / Câmara dos Deputados",
-  },
-];
+export const PROPOSTAS: Proposta[] = propostasData.propostas as Proposta[];
 
-const TOTAL_CUMPRIDAS = PROPOSTAS.filter((p) => p.status === "cumprida").length;
-const TOTAL_ANDAMENTO = PROPOSTAS.filter((p) => p.status === "andamento").length;
-const TOTAL_ARTICULACAO = PROPOSTAS.filter((p) => p.status === "nao_iniciada").length;
-const MEDIA_PROGRESSO = Math.round(PROPOSTAS.reduce((acc, p) => acc + p.progresso, 0) / PROPOSTAS.length);
+function formatarDataCurta(iso?: string): string {
+  if (!iso) return "";
+  const d = iso.slice(0, 10).split("-");
+  if (d.length !== 3) return iso;
+  return `${d[2]}/${d[1]}/${d[0]}`;
+}
 
 export default function MonitorPropostas() {
+  const [propostas, setPropostas] = useState<Proposta[]>(PROPOSTAS);
+  const [atualizadoEm, setAtualizadoEm] = useState<string>(propostasData.atualizadoEm);
   const [eixoAtivo, setEixoAtivo] = useState<"Todos" | EixoProposta>("Todos");
   const [statusFiltro, setStatusFiltro] = useState<"Todos" | StatusProposta>("Todos");
 
-  const visiveis = PROPOSTAS.filter((p) => {
+  useEffect(() => {
+    let ativo = true;
+    fetch("/api/propostas")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((payload) => {
+        if (!ativo || !payload || !Array.isArray(payload.propostas)) return;
+        setPropostas(payload.propostas as Proposta[]);
+        if (payload.atualizadoEm) setAtualizadoEm(payload.atualizadoEm);
+      })
+      .catch(() => {
+        // Mantém fallback estático de public/data/propostas.json
+      });
+    return () => {
+      ativo = false;
+    };
+  }, []);
+
+  const totalCumpridas = propostas.filter((p) => p.status === "cumprida").length;
+  const totalAndamento = propostas.filter((p) => p.status === "andamento").length;
+  const totalArticulacao = propostas.filter((p) => p.status === "nao_iniciada").length;
+  const mediaProgresso = Math.round(
+    propostas.reduce((acc, p) => acc + p.progresso, 0) / (propostas.length || 1)
+  );
+
+  const visiveis = propostas.filter((p) => {
     if (eixoAtivo !== "Todos" && p.eixo !== eixoAtivo) return false;
     if (statusFiltro !== "Todos" && p.status !== statusFiltro) return false;
     return true;
@@ -199,26 +100,31 @@ export default function MonitorPropostas() {
           <p className="eyebrow eyebrow-esc">02 · Monitor Popular de Governo</p>
           <h2 id="propostas-titulo">Monitoramento das propostas de campanha</h2>
           <p className="secao-sub">
-            A vitória nas urnas é o começo da cobrança popular. Acompanhe o andamento oficial dos 12 compromissos estruturantes do programa democrático-popular por eixo temático.
+            A vitória nas urnas é o começo da cobrança popular. Os status abaixo são sincronizados automaticamente com a API de Dados Abertos da Câmara dos Deputados e indicadores oficiais (ou auditados internamente pela equipe).
+          </p>
+          <p className="propostas-sync-info">
+            <span className="sync-ponto" aria-hidden="true" />
+            Sincronização oficial ativa (API Câmara + BCB) · Última verificação:{" "}
+            <strong>{formatarDataCurta(atualizadoEm)}</strong>
           </p>
         </div>
 
         <dl className="placar-propostas" aria-label="Resumo do cumprimento das propostas">
           <div className="pp-cumprida">
             <dt>Consolidadas</dt>
-            <dd>{TOTAL_CUMPRIDAS}</dd>
+            <dd>{totalCumpridas}</dd>
           </div>
           <div className="pp-andamento">
             <dt>Em andamento</dt>
-            <dd>{TOTAL_ANDAMENTO}</dd>
+            <dd>{totalAndamento}</dd>
           </div>
           <div className="pp-articulacao">
             <dt>Em articulação</dt>
-            <dd>{TOTAL_ARTICULACAO}</dd>
+            <dd>{totalArticulacao}</dd>
           </div>
           <div className="pp-indice">
             <dt>Índice geral</dt>
-            <dd>{MEDIA_PROGRESSO}%</dd>
+            <dd>{mediaProgresso}%</dd>
           </div>
         </dl>
       </div>
@@ -244,16 +150,16 @@ export default function MonitorPropostas() {
           <span className="filtro-rotulo">Estágio de execução</span>
           <div className="seletor">
             <button type="button" aria-pressed={statusFiltro === "Todos"} onClick={() => setStatusFiltro("Todos")}>
-              Todas ({PROPOSTAS.length})
+              Todas ({propostas.length})
             </button>
             <button type="button" aria-pressed={statusFiltro === "cumprida"} onClick={() => setStatusFiltro("cumprida")}>
-              Consolidadas ({TOTAL_CUMPRIDAS})
+              Consolidadas ({totalCumpridas})
             </button>
             <button type="button" aria-pressed={statusFiltro === "andamento"} onClick={() => setStatusFiltro("andamento")}>
-              Em andamento ({TOTAL_ANDAMENTO})
+              Em andamento ({totalAndamento})
             </button>
             <button type="button" aria-pressed={statusFiltro === "nao_iniciada"} onClick={() => setStatusFiltro("nao_iniciada")}>
-              Em articulação ({TOTAL_ARTICULACAO})
+              Em articulação ({totalArticulacao})
             </button>
           </div>
         </div>
@@ -286,6 +192,26 @@ export default function MonitorPropostas() {
             <div className="proposta-meta">
               <strong>Marco verificável:</strong> {p.metaIndicador}
             </div>
+
+            {p.proposicaoCodigo && (
+              <div className="proposta-tramitacao">
+                <div className="pt-cab">
+                  <span className="pt-cod">{p.proposicaoCodigo}</span>
+                  {p.situacaoCamara && <span className="pt-sit">{p.situacaoCamara}</span>}
+                </div>
+                {p.urlFonte && (
+                  <a
+                    href={p.urlFonte}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="pt-link"
+                  >
+                    Ficha oficial na Câmara {p.dataUltimaTramitacao ? `(${formatarDataCurta(p.dataUltimaTramitacao)})` : ""} ↗
+                  </a>
+                )}
+              </div>
+            )}
+
             <small className="proposta-fonte">Fonte de verificação: {p.fonteAcompanhamento}</small>
           </li>
         ))}

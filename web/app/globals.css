@@ -460,6 +460,14 @@ select, input[type="search"] { border: 2px solid var(--preto); border-radius: 0;
 .preench-andamento { background: var(--vermelho); }
 .preench-nao_iniciada { background: var(--preto); }
 .proposta-meta { font-size: .84rem; line-height: 1.5; background: var(--fundo); border-left: 4px solid var(--preto); padding: .55rem .75rem; }
+.propostas-sync-info { display: inline-flex; align-items: center; gap: .5rem; margin: .85rem 0 0; padding: .38rem .75rem; background: #fff; border: 2px solid var(--preto); font-size: .78rem; line-height: 1.35; color: var(--preto); box-shadow: 3px 3px 0 var(--preto); }
+.sync-ponto { width: 8px; height: 8px; border-radius: 50%; background: #1f7a4d; flex-shrink: 0; }
+.proposta-tramitacao { display: flex; flex-direction: column; gap: .3rem; padding: .55rem .7rem; background: #f8f5f4; border: 1.5px solid var(--borda); font-size: .78rem; line-height: 1.4; }
+.pt-cab { display: flex; align-items: center; justify-content: space-between; gap: .5rem; flex-wrap: wrap; }
+.pt-cod { font-weight: 800; text-transform: uppercase; letter-spacing: .04em; color: var(--preto); }
+.pt-sit { font-size: .72rem; font-weight: 700; color: var(--vermelho-esc); background: var(--vermelho-claro); padding: .12rem .42rem; border: 1px solid var(--vermelho); }
+.pt-link { font-size: .74rem; font-weight: 700; color: var(--preto); text-decoration: underline; text-underline-offset: 2px; width: fit-content; }
+.pt-link:hover { color: var(--vermelho); }
 .proposta-fonte { font-size: .75rem; line-height: 1.4; color: var(--suave); }
 
 /* Comparativo Regional */
