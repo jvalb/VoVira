@@ -1,181 +1,176 @@
 # VoVira 🇧🇷
 
-> **Plataforma web de inteligência territorial e diálogo eleitoral baseada exclusivamente em dados públicos oficiais (TSE e IBGE), orientada para a mobilização cidadã e virada de votos em prol da candidatura de Luiz Inácio Lula da Silva no 2º turno de 2026.**
+> **Plataforma web de inteligência territorial, memória da vitória democrática de 2026 e monitoramento popular do novo mandato de Luiz Inácio Lula da Silva — baseada exclusivamente em dados públicos oficiais (TSE, IBGE, Câmara dos Deputados e Banco Central).**
+
+- 🌐 **Produção (Vercel):** https://web-blush-kappa-88.vercel.app
+- 📦 **Repositório Oficial:** https://github.com/jvalb/VoVira
 
 ---
 
 ## 📌 Visão Geral
 
-O **VoVira** é uma aplicação web interativa que combina resultados eleitorais oficiais detalhados por município e zona eleitoral (TSE) com indicadores socioeconômicos do Censo Demográfico 2022 (IBGE).
+O **VoVira** nasceu como ferramenta de inteligência territorial para o 2º turno presidencial de 2026 e evoluiu, após a confirmação oficial da reeleição de Luiz Inácio Lula da Silva pelo TSE (**64.256.232 votos válidos — 51,79%** na Eleição Ordinária Federal `6258`), para um observatório permanente de acompanhamento popular, análise regional comparativa e formação política.
 
-A ferramenta foi projetada para responder a duas necessidades centrais de militantes, lideranças comunitárias e eleitores engajados:
-1. **Onde atuar com maior eficiência?** Identificar municípios e zonas com maior contingente de votos a virar, abstenções mobilizáveis ou votos de terceiros candidatos disponíveis.
-2. **Como dialogar com respeito e eficácia?** Fornecer ganchos de conversa fundamentados na realidade concreta do território (acesso a água, saneamento básico, coleta de lixo, conectividade e alfabetização), confrontando as necessidades locais com as propostas oficiais dos planos de governo.
-
----
-
-## 🛡️ Princípios de Integridade e Ética
-
-- **Dados 100% Oficiais e Inalterados:** As votações derivam diretamente dos arquivos de detalhe e boletins de urna do Tribunal Superior Eleitoral (TSE Dados Abertos). Os indicadores sociais provêm do SIDRA/Censo 2022 do Instituto Brasileiro de Geografia e Estatística (IBGE).
-- **Sem Pré-arredondamento em Disco:** A base de dados preserva as somas inteiras exatas de cada município e zona. Todas as porcentagens e margens são calculadas em tempo de execução no cliente.
-- **Transparência e Auditabilidade:** Todo o pipeline registra os hashes criptográficos SHA-256 dos arquivos de origem, permitindo verificação pública na rota `/fontes`.
-- **Conformidade com a Legislação Eleitoral:** As orientações de campo reforçam expressamente os limites da Lei nº 9.504/1997 e da Resolução TSE nº 23.610/2019: proibição rigorosa de compra de votos, fornecimento de alimentação, transporte ilegal e propagação de desinformação.
+A plataforma articula cinco frentes complementares:
+1. **Vitória Democrática e Parabenização ao Presidente Reeleito:** Placar oficial consolidado do 2º turno de 2026 e síntese dos compromissos com a soberania nacional, a justiça tributária e os direitos sociais.
+2. **Monitor Popular de Propostas de Campanha:** Acompanhamento dos 12 compromissos estruturantes do programa de governo em 5 eixos temáticos, com **status bloqueados contra edição pública** e **sincronização automática + curadoria interna** via API de Dados Abertos da Câmara dos Deputados e Banco Central.
+3. **Comparativo Regional (1º Turno × 2º Turno de 2026 e 2º Turno de 2022):** Balanço de votos, crescimento absoluto e variação em pontos percentuais nas 5 macrorregiões do IBGE e nas 27 Unidades da Federação + Exterior (`ZZ`).
+4. **Vozes da Esquerda (`Socialistas`, `Comunistas` e `Progressistas`):** Painel de parlamentares, intelectuais e lideranças populares que impulsionam pautas estruturais como o fim da escala 6x1, a reforma urbana e a soberania popular.
+5. **Mapa Coroplético e Raio-X dos 5.570 Municípios e 18.858 Zonas Eleitorais:** Consulta direta por município com indicadores do Censo Demográfico 2022 (IBGE) e votação detalhada por zona eleitoral.
 
 ---
 
-## 🚀 Funcionalidades
+## 🛡️ Princípios de Integridade e Transparência
 
-### 1. Mapa Coroplético dos 5.570 Municípios
-- Renderizado com MapLibre GL JS e WebGL de alto desempenho.
-- Permite alternar métricas: *Margem Lula vs Oponente (p.p.)*, *Votação Lula (%)*, *Votação Oponente (%)*, *Abstenção (%)*, *Variação vs 2022 (p.p.)* e *Meta de Virada (votos necessários)*.
-- Cores dinâmicas interpoladas via `feature-state` com suporte a zoom suave e seleção visual.
-
-### 2. Painel Territorial Completo
-- **Placar do 1º Turno 2026:** Percentuais válidos de Lula, oponente, abstenção e população do Censo 2022.
-- **Metas de Virada:** Cálculo exato de quantos novos votos (de abstenção/brancos/nulos) ou quantas trocas de lado são matematicamente necessárias para Lula assumir a liderança na cidade.
-- **Histórico Comparativo (Presidente):** Comparação tabular direta entre o 1º turno de 2022, 2º turno de 2022 e 1º turno de 2026.
-- **Perfil do Território (Censo 2022):** Tabela comparativa dos 5 indicadores do município vs média do Estado vs média do Brasil.
-
-### 3. Zonas Eleitorais Detalhadas
-- Listagem completa de todas as zonas eleitorais do município selecionado (ex.: 58 zonas em São Paulo, 49 no Rio de Janeiro).
-- Coluna exclusiva **Virada / Vantagem**: destaca em vermelho a meta exata de votos para virar em cada zona onde Lula ficou atrás, e em verde as zonas onde lidera.
-
-### 4. Ganchos de Conversa e Mobilização
-- Recomendações determinísticas de abordagem baseadas nas fragilidades estruturais apontadas pelo IBGE (ex.: bairros sem saneamento, déficit de água encanada, baixa conectividade).
-- Citação direta da fonte oficial e link para a tabela SIDRA correspondente.
-
-### 5. Ferramentas de Campo (WhatsApp, Compartilhamento e Impressão)
-- **Copiar Roteiro:** Formata um roteiro completo em texto puro para WhatsApp/Telegram com resumo do resultado local, metas de virada, pontos de diálogo com dados oficiais, lembretes legais e link direto.
-- **Botão WhatsApp:** Compartilha instantaneamente via API oficial do WhatsApp ou Web Share API no celular.
-- **Imprimir / Salvar PDF:** Folha de estilo `@media print` otimizada para impressão em uma página (panfletagem e comitês de bairro), ocultando mapa e menus e formatando os dados em alto contraste.
-- **Deep Linking por URL (`?m=CODIGO_IBGE`):** Permite compartilhar links diretos para qualquer município brasileiro (ex.: `https://vovira.app/?m=3550308` para São Paulo).
-
-### 6. Simulador de Cenários Interativo
-- Sliders interativos para testar hipóteses no 2º turno:
-  - Percentual de abstenção mobilizado e taxa de preferência para Lula.
-  - Taxa de transferência de votos de outros candidatos para Lula e oponente.
-- Cálculo em tempo real do novo placar e do ganho líquido de votos.
-
-### 7. Onde Atuar (Rankings Estratégicos)
-- Filtro por Unidade da Federação (ou Brasil inteiro).
-- 4 abas de priorização:
-  - **Mobilização:** Municípios com maior ganho potencial ao reduzir a abstenção onde Lula lidera.
-  - **Persuasão:** Municípios com maior volume de votos de terceiros candidatos.
-  - **Recuperação:** Municípios onde Lula teve maior perda relativa em relação a 2022.
-  - **Equilíbrio:** Municípios mais acirrados com menor diferença absoluta de votos.
+- **Dados 100% Oficiais e Inalterados:**
+  - **TSE (1º e 2º Turnos de 2022 e 2026):** Arquivos de detalhe de votação por município e zona eleitoral e JSONs consolidados da Eleição Federal `6258` (`resultados.tse.jus.br`).
+  - **IBGE (Censo Demográfico 2022):** População residente, alfabetização, abastecimento de água, esgotamento sanitário, coleta de lixo e conectividade via API SIDRA.
+  - **Câmara dos Deputados & BCB:** Situação de tramitação legislativa em tempo real (`dadosabertos.camara.leg.br/api/v2/proposicoes`) e série histórica oficial do Salário Mínimo (`api.bcb.gov.br` — SGS 1619).
+- **Sem Pré-arredondamento em Disco:** As bases preservam os inteiros exatos de cada município, UF e zona eleitoral; percentuais, margens e variações são calculados em tempo de execução.
+- **Status de Propostas Protegidos:** O usuário final visualiza e filtra as propostas sem poder adulterar seus status. Qualquer atualização ocorre exclusivamente por sincronização oficial automática ou comando interno autenticado.
+- **Auditabilidade Pública (`/fontes`):** Página dedicada com todos os hashes criptográficos `SHA-256` dos arquivos brutos, endpoints consultados e fórmulas matemáticas utilizadas.
 
 ---
 
-## 🏗️ Arquitetura do Sistema
+## 🚀 Funcionalidades Principais
+
+### 1. Monitor Popular de Propostas (`#propostas`)
+- **12 compromissos estruturantes** distribuídos em 5 eixos: *Economia e Trabalho*, *Social e Saúde*, *Educação e Ciência*, *Clima e Amazônia* e *Democracia e Soberania*.
+- Placar consolidado no topo (*Consolidadas*, *Em andamento*, *Em articulação* e *Índice geral de execução*).
+- Cada card exibe:
+  - Estágio de execução (somente leitura para visitantes);
+  - Barra de progresso aferida;
+  - Marco verificável e órgão oficial de acompanhamento;
+  - **Código da proposição legislativa, situação ao vivo na Câmara dos Deputados e link direto para a ficha oficial de tramitação**.
+
+### 2. Comparativo Regional 1º × 2º Turno (`#comparativo`)
+- Alternância entre dois modos de análise:
+  - **Salto no 2º Turno (`1º Turno 2026 → 2º Turno 2026`)**: mostra quantos novos votos Lula e o oponente somaram entre o 1º e o 2º turno de 2026 em cada região.
+  - **Evolução Histórica (`2º Turno 2022 → 2º Turno 2026`)**: compara o desempenho do 2º turno de 2026 com o 2º turno de 2022.
+- Cards das 5 macrorregiões (*Nordeste*, *Norte*, *Sudeste*, *Sul* e *Centro-Oeste*) e tabela interativa das **27 UFs + Exterior (`ZZ`)**.
+
+### 3. Vozes da Esquerda (`#esquerda`)
+- Filtro por corrente política: **Todos**, **Socialistas**, **Comunistas** e **Progressistas**.
+- Apresenta organização/partido, território de atuação, pautas prioritárias e bio de nomes como Erika Hilton, Guilherme Boulos, Glauber Braga, Jones Manoel, Sabrina Fernandes, João Pedro Stédile, Humberto Matos, Renato Freitas e Laura Carvalho.
+
+### 4. Mapa Eleitoral e Painel Territorial (`#mapa`)
+- Mapa WebGL (MapLibre GL JS) com os 5.570 municípios brasileiros e seletor de métricas (*Margem Lula vs Oponente*, *Votação Lula %*, *Votação Oponente %*, *Abstenção %*, *Variação vs 2022* e *Meta de Virada*).
+- Painel lateral direto com placar nacional/municipal, histórico comparativo, indicadores do Censo 2022 (Município × UF × Brasil) e tabela de zonas eleitorais.
+
+---
+
+## 🔄 Como Funciona a Atualização das Propostas
+
+O Monitor de Propostas conta com um **motor híbrido em 3 camadas** que impede alterações pelo público externo e mantém os dados sempre atualizados:
+
+### Camada 1 — Sincronização Automática em Tempo Real na Vercel (`/api/propostas`)
+A rota [`web/app/api/propostas/route.ts`](web/app/api/propostas/route.ts) possui *Incremental Static Regeneration* (`revalidate = 3600` — 1 hora). A cada hora, o backend consulta automaticamente a **API de Dados Abertos da Câmara dos Deputados** (`https://dadosabertos.camara.leg.br/api/v2/proposicoes/{camaraId}`) para todas as 12 propostas e atualiza a situação legislativa, o despacho mais recente e o status (respeitando propostas travadas com `overrideManual: true`).
+
+### Camada 2 — Automação Diária e Painel Manual no GitHub Actions
+O workflow [`.github/workflows/update-propostas.yml`](.github/workflows/update-propostas.yml) opera de duas formas:
+1. **Automático (Cron Diário às 08:00 BRT):** Roda `python3 pipeline/03_update_propostas.py --auto`, consulta a Câmara dos Deputados e o Banco Central (SGS 1619) e faz commit/push automático em `web/public/data/propostas.json` caso algum indicador ou tramitação tenha mudado.
+2. **Manual pela interface do GitHub (`workflow_dispatch`):** Na aba **Actions → Atualizar Monitor de Propostas → Run workflow**, o mantenedor do repositório pode escolher `modo = manual` e informar `proposta_id`, `status`, `progresso` e `marco` diretamente pelo navegador.
+
+### Camada 3 — CLI Manual Interna pelo Terminal
+Para gerenciar as propostas localmente a partir da pasta `web/`:
+
+```bash
+# 1. Listar todas as propostas, status, percentuais e modo (AUTO vs MANUAL)
+npm run propostas:list
+
+# 2. Forçar varredura automática imediata nas APIs da Câmara e do Banco Central
+npm run propostas:sync
+
+# 3. Atualizar manualmente uma proposta específica (ativa overrideManual=true)
+npm run propostas:set -- --id escala-6x1 --status cumprida --progresso 100 --marco "Regulamentação setorial da EC 141/2026 concluída"
+
+# 4. Remover trava manual para que a proposta volte a ser calculada automaticamente
+npm run propostas:set -- --id escala-6x1 --unlock-auto
+```
+
+---
+
+## 🏗️ Arquitetura do Projeto
 
 ```
 VoVira/
+├── .github/workflows/
+│   └── update-propostas.yml   # Cron diário + painel manual (workflow_dispatch) de propostas
 ├── data/
-│   ├── certs/                 # Certificado intermediário Sectigo para API IBGE
-│   └── raw/                   # Manifesto SHA-256 das fontes oficiais
+│   ├── certs/                 # Cadeia ICP-Brasil / Sectigo para verificação TLS
+│   └── raw/                   # Manifesto SHA-256 e JSONs brutos do TSE (1º e 2º turnos) e IBGE
 ├── pipeline/
-│   ├── 01_fetch.py            # Download automatizado de TSE e IBGE com verificação TLS
-│   ├── 02_build.py            # Consolidação, reconciliação TSE-IBGE e geração de JSONs
-│   └── http_util.py           # Cliente HTTP com injeção segura de cadeia de certificados
+│   ├── 01_fetch.py            # Download das bases de 2022, 2026 (1ºT) e Censo IBGE 2022
+│   ├── 01b_fetch_2026t2.py    # Download e auditoria aritmética do 2º turno oficial de 2026 (TSE 6258)
+│   ├── 02_build.py            # Consolidação de 18.858 zonas, 5.570 municípios e agregados por UF/BR
+│   ├── 03_update_propostas.py # Motor automático (API Câmara + BCB) e CLI manual de propostas
+│   └── http_util.py           # Cliente HTTP com verificação TLS estrita
 ├── web/
 │   ├── app/
 │   │   ├── api/
-│   │   │   ├── meta/          # Metadados e agregados nacionais
-│   │   │   ├── municipio/[c]/ # Perfil completo, zonas e insights do município
-│   │   │   ├── ranking/       # Listas estratégicas de atuação com filtro de UF
-│   │   │   └── resumo/        # Payload otimizado para o mapa coroplético
-│   │   ├── fontes/            # Página de auditoria pública, hashes e metodologia
-│   │   └── globals.css        # Estilos responsivos, acessibilidade e CSS de impressão
-│   ├── components/            # Componentes React 19 (MapView, Painel, Simulador, etc.)
-│   ├── lib/                   # Lógica pura de cálculo (métricas, virada, ranking, share)
-│   └── public/data/           # Bases consolidadas (malha.geojson, municipios.json, zonas.json)
+│   │   │   ├── meta/          # Metadados e agregados nacionais/estaduais (2022, 2026t1, 2026t2)
+│   │   │   ├── municipio/[c]/ # Dados eleitorais, zonas e Censo 2022 por código IBGE
+│   │   │   ├── propostas/     # Sincronização ISR (1h) com a Câmara + POST interno protegido
+│   │   │   ├── ranking/       # Rankings de municípios por UF
+│   │   │   └── resumo/        # Payload enxuto para renderização do mapa coroplético
+│   │   ├── fontes/            # Página de Fontes, Metodologia e Auditoria SHA-256
+│   │   └── globals.css        # Sistema tipográfico (Anton + Plus Jakarta Sans) e estilos
+│   ├── components/
+│   │   ├── App.tsx                # Orquestração das seções e do mapa interativo
+│   │   ├── Hero.tsx               # Hero comemorativo + seção de parabenização ao Presidente
+│   │   ├── MonitorPropostas.tsx   # Monitor Popular de Governo (somente leitura no cliente)
+│   │   ├── ComparativoRegional.tsx# Comparativo 1º × 2º turno por Região e UF
+│   │   ├── EsquerdaRadical.tsx    # Vozes da Esquerda (Socialistas, Comunistas e Progressistas)
+│   │   ├── MapView.tsx            # Mapa coroplético MapLibre GL JS
+│   │   ├── Nacional.tsx           # Resumo nacional no painel lateral
+│   │   └── Painel.tsx             # Detalhe municipal, Censo 2022 e zonas eleitorais
+│   ├── lib/                   # Cálculos puros, agregações regionais e suíte de testes (Vitest)
+│   └── public/data/           # Bases servidas (meta.json, municipios.json, zonas.json, propostas.json)
 ├── Dockerfile                 # Multi-stage build para produção
 └── docker-compose.yml         # Orquestração de container
 ```
 
 ---
 
-## ⚙️ Instalação e Execução Local
+## ⚙️ Instalação, Execução e Testes
 
 ### Pré-requisitos
-- Node.js 20+ e npm
-- Python 3.10+ (apenas se for reexecutar o pipeline de dados)
+- **Node.js 20+** e `npm`
+- **Python 3.10+** (para executar os scripts de sincronização e ETL em `pipeline/`)
 
-### 1. Executando a Aplicação Web
+### 1. Ambiente de Desenvolvimento
 
 ```bash
-# Entre na pasta da aplicação web
 cd web
-
-# Instale as dependências
 npm install
-
-# Inicie o servidor de desenvolvimento
 npm run dev
-
-# Acesse http://localhost:3000 no navegador
+# Acesse http://localhost:3000
 ```
 
-### 2. Build de Produção
+### 2. Verificação de Qualidade e Testes Automatizados
 
 ```bash
 cd web
-npm run build
-npm run start
+npm run typecheck   # Verificação estática TypeScript (tsc --noEmit)
+npm run lint        # ESLint Next.js
+npm test            # 26 testes unitários e de integridade de dados (Vitest)
 ```
 
-### 3. Executando os Testes Automatizados
+### 3. Reproduzindo o Pipeline Completo de Dados
 
 ```bash
-cd web
-
-# Testes unitários de métricas e compartilhamento (Vitest)
-npm test
-
-# Verificação estática de tipos TypeScript
-npm run typecheck
-
-# Lint de acessibilidade e código
-npm run lint
-```
-
----
-
-## 🐳 Executando com Docker
-
-A aplicação inclui um `Dockerfile` multi-stage com usuário não-root e `docker-compose.yml`:
-
-```bash
-# Construir e iniciar o container em segundo plano
-docker compose up --build -d
-
-# Visualizar logs
-docker compose logs -f
-
-# Parar o container
-docker compose down
-```
-
-A aplicação ficará disponível em `http://localhost:3000`.
-
----
-
-## 🔄 Reproduzindo o Pipeline de Dados (ETL)
-
-Os dados pré-processados já acompanham o repositório em `web/public/data/`. Caso queira reconstruí-los a partir dos arquivos brutos das fontes governamentais:
-
-```bash
-# 1. Baixar bases oficiais do TSE e IBGE (cria data/raw/ e valida certificados)
+# 1. Baixar dados de 2022, 1º turno 2026 e Censo IBGE 2022
 python3 pipeline/01_fetch.py
 
-# 2. Processar 18.858 zonas eleitorais e 5.570 municípios
-python3 pipeline/02_build.py
-```
+# 2. Baixar resultados oficiais consolidados do 2º turno de 2026 (Eleição TSE 6258)
+python3 pipeline/01b_fetch_2026t2.py
 
-O script `02_build.py` executa auditoria de integridade em 100% das zonas:
-$$\sum \text{votos por candidato} = \text{votos válidos}$$
-$$\text{votos válidos} + \text{brancos} + \text{nulos} = \text{comparecimento}$$
-$$\text{comparecimento} + \text{abstenção} = \text{eleitores aptos}$$
+# 3. Construir web/public/data/{meta,municipios,zonas,malha}.json
+python3 pipeline/02_build.py
+
+# 4. Sincronizar o Monitor de Propostas com as APIs da Câmara e do Banco Central
+python3 pipeline/03_update_propostas.py --auto
+```
 
 ---
 
@@ -184,19 +179,21 @@ $$\text{comparecimento} + \text{abstenção} = \text{eleitores aptos}$$
 1. **Percentual de Votos Válidos:**
    $$\%_{\text{válidos}} = \frac{\text{votos do candidato}}{\text{total de votos válidos}} \times 100$$
 
-2. **Diferença (Margem Direta):**
-   $$\text{Margem} = \text{votos Lula} - \text{votos Oponente}$$
+2. **Margem Direta (Votos e Pontos Percentuais):**
+   $$\text{Margem}_{\text{votos}} = \text{votos Lula} - \text{votos Oponente}$$
+   $$\text{Margem}_{\text{p.p.}} = \%_{\text{Lula}} - \%_{\text{Oponente}}$$
 
-3. **Votos Novos Necessários para Virada:**
-   $$\text{Novos Votos} = (\text{votos Oponente} - \text{votos Lula}) + 1$$
-   *(Provenientes de abstenções que passem a comparecer ou eleitores de outros candidatos/brancos/nulos)*
+3. **Variação entre Turnos por Região / UF:**
+   $$\Delta_{\text{votos}} = \text{votos}_{\text{2º Turno}} - \text{votos}_{\text{1º Turno}}$$
+   $$\Delta_{\text{p.p.}} = \%_{\text{2º Turno}} - \%_{\text{1º Turno}}$$
 
-4. **Conversões Diretas (Trocas de Lado):**
-   $$\text{Trocas} = \left\lfloor \frac{\text{votos Oponente} - \text{votos Lula}}{2} \right\rfloor + 1$$
-   *(Cada eleitor convencido a trocar de lado reduz 1 voto do oponente e soma 1 voto a Lula, alterando o saldo em 2 votos)*
+4. **Identidades Aritméticas Auditadas em 100% das Urnas/UFs:**
+   $$\sum \text{votos nominais} = \text{votos válidos}$$
+   $$\text{votos válidos} + \text{brancos} + \text{nulos} = \text{comparecimento}$$
+   $$\text{comparecimento} + \text{abstenção} = \text{eleitorado apto}$$
 
 ---
 
-## 📜 Licença e Responsabilidade
+## 📜 Licença e Transparência
 
-Os dados utilizados são públicos sob a Lei de Acesso à Informação (Lei nº 12.527/2011). O código da plataforma está disponível para fins cívicos e democráticos. Recomenda-se a todos os usuários seguir rigorosamente as diretrizes éticas e a legislação do Tribunal Superior Eleitoral.
+Todos os dados eleitorais, demográficos e legislativos utilizados são públicos sob a Lei de Acesso à Informação (Lei nº 12.527/2011). O código-fonte é aberto para fins cívicos, acadêmicos e de controle social democrático.
