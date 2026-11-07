@@ -359,13 +359,16 @@ def consultar_salario_minimo_bcb() -> dict[str, str] | None:
     return None
 
 
-def sincronizar_automaticamente(dados: dict[str, Any]) -> int:
+def sincronizar_automaticamente(dados: dict[str, Any], forcar: bool = False) -> int:
     alteracoes = 0
     print("Iniciando varredura automática nas APIs oficiais (Câmara dos Deputados + BCB)...")
 
     sm = consultar_salario_minimo_bcb()
     if sm:
-        dados.setdefault("indicadoresOficiais", {})["salarioMinimoBCB"] = sm
+        anterior_sm = dados.get("indicadoresOficiais", {}).get("salarioMinimoBCB")
+        if anterior_sm != sm:
+            dados.setdefault("indicadoresOficiais", {})["salarioMinimoBCB"] = sm
+            alteracoes += 1
         print(f"  [BCB SGS 1619] Salário mínimo vigente consultado: R$ {sm['valor']} (ref. {sm['data']})")
 
     for p in dados.get("propostas", []):
@@ -376,7 +379,13 @@ def sincronizar_automaticamente(dados: dict[str, Any]) -> int:
         if not info:
             continue
 
-        antes = (p.get("situacaoCamara"), p.get("ultimaTramitacao"), p.get("status"), p.get("progresso"))
+        antes = (
+            p.get("situacaoCamara"),
+            p.get("ultimaTramitacao"),
+            p.get("dataUltimaTramitacao"),
+            p.get("status"),
+            p.get("progresso"),
+        )
         p["situacaoCamara"] = info["situacaoCamara"]
         p["ultimaTramitacao"] = info["ultimaTramitacao"]
         if info["dataUltimaTramitacao"]:
@@ -391,7 +400,13 @@ def sincronizar_automaticamente(dados: dict[str, Any]) -> int:
             p["status"] = novo_status
             p["progresso"] = novo_prog
 
-        depois = (p.get("situacaoCamara"), p.get("ultimaTramitacao"), p.get("status"), p.get("progresso"))
+        depois = (
+            p.get("situacaoCamara"),
+            p.get("ultimaTramitacao"),
+            p.get("dataUltimaTramitacao"),
+            p.get("status"),
+            p.get("progresso"),
+        )
         if antes != depois:
             alteracoes += 1
         print(
@@ -399,9 +414,12 @@ def sincronizar_automaticamente(dados: dict[str, Any]) -> int:
             f"{p['situacaoCamara']} -> status={p['status']} ({p['progresso']}%)"
         )
 
-    dados["atualizadoEm"] = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    salvar_dados(dados)
-    print(f"Sincronização concluída ({alteracoes} propostas atualizadas). Arquivo salvo em {PROPOSTAS_PATH}")
+    if alteracoes > 0 or forcar or not PROPOSTAS_PATH.exists():
+        dados["atualizadoEm"] = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        salvar_dados(dados)
+        print(f"Sincronização concluída ({alteracoes} alterações gravadas em {PROPOSTAS_PATH}).")
+    else:
+        print("Sincronização concluída: nenhuma alteração detectada nas fontes oficiais.")
     return alteracoes
 
 

@@ -91,7 +91,7 @@ export default function Fontes() {
             <i>03</i>Regiões
           </Link>
           <Link href="/#esquerda">
-            <i>04</i>Nova Esquerda
+            <i>04</i>Vozes da Esquerda
           </Link>
           <Link href="/#mapa">
             <i>05</i>Mapa

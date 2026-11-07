@@ -18,8 +18,6 @@ const MapView = dynamic(() => import("./MapView"), { ssr: false, loading: () => 
 
 type SecaoAtiva = "inicio" | "propostas" | "regioes" | "esquerda" | "mapa";
 
-const SEGUNDO_TURNO = new Date("2026-10-25T00:00:00-03:00");
-
 export interface NacionalProps {
   nacional: Agg;
   nacional2T: Agg;
@@ -42,7 +40,6 @@ export default function App({
   const [metricKey, setMetricKey] = useState<MetricKey>("margem");
   const [codigo, setCodigo] = useState<string | null>(null);
   const [foco, setFoco] = useState<{ codigo: string; n: number } | null>(null);
-  const [dias, setDias] = useState<number | null>(null);
   const [secao, setSecao] = useState<SecaoAtiva>("inicio");
 
   useEffect(() => {
@@ -60,8 +57,6 @@ export default function App({
         }
       })
       .catch((e: Error) => setErro(e.message));
-    const d = Math.ceil((SEGUNDO_TURNO.getTime() - Date.now()) / 86_400_000);
-    setDias(d);
 
     const onPopState = () => {
       const params = new URLSearchParams(window.location.search);
@@ -162,7 +157,7 @@ export default function App({
             <i>03</i>Regiões
           </button>
           <button type="button" {...cur("esquerda")} onClick={() => rolarPara("esquerda")}>
-            <i>04</i>Nova Esquerda
+            <i>04</i>Vozes da Esquerda
           </button>
           <button type="button" {...cur("mapa")} onClick={() => rolarPara("mapa")}>
             <i>05</i>Mapa
@@ -179,7 +174,6 @@ export default function App({
         totalizacao1T={nacional.totalizacao}
         totalizacao2T={nacional.totalizacao2T}
         municipiosMapeados={nacional.municipiosMapeados}
-        dias={dias}
         busca={<Busca resumo={resumo} onPick={(c) => { abrir(c, true); rolarPara("mapa"); }} />}
         onIr={irPara}
       />

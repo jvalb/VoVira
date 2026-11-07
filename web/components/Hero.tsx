@@ -29,8 +29,8 @@ const TRILHAS: Trilha[] = [
   },
   {
     n: "03",
-    titulo: "Nova esquerda radical",
-    desc: "Conheça parlamentares, intelectuais e lideranças que impulsionam uma esquerda mais combativa.",
+    titulo: "Vozes da esquerda",
+    desc: "Conheça parlamentares, intelectuais e lideranças socialistas, comunistas e progressistas.",
     destino: "esquerda",
   },
   {
@@ -47,7 +47,6 @@ export default function Hero({
   totalizacao1T,
   totalizacao2T,
   municipiosMapeados = 5571,
-  dias,
   busca,
   onIr,
 }: {
@@ -56,7 +55,6 @@ export default function Hero({
   totalizacao1T: string;
   totalizacao2T: string;
   municipiosMapeados?: number;
-  dias: number | null;
   busca: ReactNode;
   onIr: (d: Destino) => void;
 }) {
@@ -100,27 +98,13 @@ export default function Hero({
 
         <div className="hero-visual" aria-hidden="true">
           <div className="hero-contagem">
-            {dias != null && dias > 0 ? (
-              <>
-                <span className="hc-topo">Faltam</span>
-                <strong>{dias}</strong>
-                <span className="hc-unid">{dias === 1 ? "Dia" : "Dias"}</span>
-                <span className="hc-rodape">
-                  2º turno
-                  <small>25 · out</small>
-                </span>
-              </>
-            ) : (
-              <>
-                <span className="hc-topo">Reeleito</span>
-                <strong>13</strong>
-                <span className="hc-unid">51,79%</span>
-                <span className="hc-rodape">
-                  2º turno
-                  <small>25 · out</small>
-                </span>
-              </>
-            )}
+            <span className="hc-topo">Reeleito</span>
+            <strong>13</strong>
+            <span className="hc-unid">51,79%</span>
+            <span className="hc-rodape">
+              2º turno
+              <small>25 · out</small>
+            </span>
           </div>
           <dl className="placar-hero">
             <div>

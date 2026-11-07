@@ -540,5 +540,19 @@ select, input[type="search"] { border: 2px solid var(--preto); border-radius: 0;
 @media (max-width: 900px) {
   .parabens-faixa, .secao-editorial { padding: 3.5rem var(--margem); }
   .parabens-conteudo, .trilhas-grade-4, .propostas-grade, .regioes-grade, .esquerda-grade { grid-template-columns: 1fr; }
-  .placar-propostas { flex-wrap: wrap; }
+  .placar-propostas { display: grid; grid-template-columns: repeat(2, 1fr); width: 100%; }
+  .placar-propostas > div { min-width: 0; }
+  .placar-propostas > div:nth-child(2) { border-right: 0; }
+  .placar-propostas > div:nth-child(1), .placar-propostas > div:nth-child(2) { border-bottom: 3px solid var(--preto); }
+}
+
+@media (max-width: 600px) {
+  .numeros-grade { grid-template-columns: 1fr; }
+  .placar { grid-template-columns: 1fr; }
+  .barras li { grid-template-columns: 7.5rem 1fr 4.2rem; }
+  .controles label, .controles .campo, .campo .busca { width: 100%; flex: 1 1 100%; }
+  .placar-hero > div { padding: .45rem .65rem; }
+  .placar-hero dd { font-size: 1.55rem; }
+  .regiao-deltas { grid-template-columns: 1fr; gap: .75rem; }
+  .propostas-sync-info { display: flex; width: 100%; flex-wrap: wrap; }
 }
