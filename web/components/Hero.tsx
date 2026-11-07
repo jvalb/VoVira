@@ -18,7 +18,7 @@ const TRILHAS: Trilha[] = [
   {
     n: "01",
     titulo: "Monitor de propostas",
-    desc: "Acompanhe os 12 compromissos centrais de campanha por eixo temático e estágio de execução.",
+    desc: "Acompanhe 24 propostas e leis em escala Nacional (Câmara, Senado e Congresso) e Estadual (Assembleias Legislativas).",
     destino: "propostas",
   },
   {

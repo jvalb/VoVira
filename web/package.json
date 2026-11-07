@@ -11,7 +11,9 @@
     "typecheck": "tsc --noEmit",
     "propostas:sync": "python3 ../pipeline/03_update_propostas.py --auto",
     "propostas:list": "python3 ../pipeline/03_update_propostas.py --list",
-    "propostas:set": "python3 ../pipeline/03_update_propostas.py"
+    "propostas:set": "python3 ../pipeline/03_update_propostas.py",
+    "veracidade:check": "python3 ../pipeline/04_verify_veracidade.py",
+    "veracidade:live": "python3 ../pipeline/04_verify_veracidade.py --live"
   },
   "dependencies": {
     "maplibre-gl": "^6.14.0",

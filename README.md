@@ -1,8 +1,8 @@
 # VoVira 🇧🇷
 
-> **Plataforma web de inteligência territorial, memória da vitória democrática de 2026 e monitoramento popular do novo mandato de Luiz Inácio Lula da Silva — baseada exclusivamente em dados públicos oficiais (TSE, IBGE, Câmara dos Deputados e Banco Central).**
+> **Plataforma web de inteligência territorial, memória da vitória democrática de 2026 e monitoramento popular nacional e estadual do novo mandato de Luiz Inácio Lula da Silva — baseada exclusivamente em dados públicos oficiais (TSE, IBGE, Senado Federal, Congresso Nacional, Câmara dos Deputados, Assembleias Legislativas Estaduais e Banco Central).**
 
-- 🌐 **Produção (Vercel):** https://web-blush-kappa-88.vercel.app
+- 🌐 **Produção (Vercel):** https://vovira.vercel.app (e https://web-blush-kappa-88.vercel.app)
 - 📦 **Repositório Oficial:** https://github.com/jvalb/VoVira
 
 ---
@@ -13,19 +13,25 @@ O **VoVira** nasceu como ferramenta de inteligência territorial para o 2º turn
 
 A plataforma articula cinco frentes complementares:
 1. **Vitória Democrática e Parabenização ao Presidente Reeleito:** Placar oficial consolidado do 2º turno de 2026 e síntese dos compromissos com a soberania nacional, a justiça tributária e os direitos sociais.
-2. **Monitor Popular de Propostas de Campanha:** Acompanhamento dos 12 compromissos estruturantes do programa de governo em 5 eixos temáticos, com **status bloqueados contra edição pública** e **sincronização automática + curadoria interna** via API de Dados Abertos da Câmara dos Deputados e Banco Central.
+2. **Monitor Popular de Propostas (Escala Nacional e Estadual):** Acompanhamento de **24 propostas e leis verificáveis** (**16 Nacionais Bicamerais** + **8 Estaduais**) distribuídas em 5 eixos temáticos, com **status bloqueados contra edição pública**, agrupamento de **4 redes oficiais de APIs de Dados Abertos** (Senado/Congresso, Câmara Federal, Assembleias Legislativas Estaduais e Banco Central) e selo de autenticidade criptográfica `SHA-256` por proposta.
 3. **Comparativo Regional (1º Turno × 2º Turno de 2026 e 2º Turno de 2022):** Balanço de votos, crescimento absoluto e variação em pontos percentuais nas 5 macrorregiões do IBGE e nas 27 Unidades da Federação + Exterior (`ZZ`).
 4. **Vozes da Esquerda (`Socialistas`, `Comunistas` e `Progressistas`):** Painel de parlamentares, intelectuais e lideranças populares que impulsionam pautas estruturais como o fim da escala 6x1, a reforma urbana e a soberania popular.
 5. **Mapa Coroplético e Raio-X dos 5.570 Municípios e 18.858 Zonas Eleitorais:** Consulta direta por município com indicadores do Censo Demográfico 2022 (IBGE) e votação detalhada por zona eleitoral.
 
 ---
 
-## 🛡️ Princípios de Integridade e Transparência
+## 🛡️ Princípios de Integridade, Agrupamento de APIs e Testes de Veracidade
 
 - **Dados 100% Oficiais e Inalterados:**
   - **TSE (1º e 2º Turnos de 2022 e 2026):** Arquivos de detalhe de votação por município e zona eleitoral e JSONs consolidados da Eleição Federal `6258` (`resultados.tse.jus.br`).
   - **IBGE (Censo Demográfico 2022):** População residente, alfabetização, abastecimento de água, esgotamento sanitário, coleta de lixo e conectividade via API SIDRA.
-  - **Câmara dos Deputados & BCB:** Situação de tramitação legislativa em tempo real (`dadosabertos.camara.leg.br/api/v2/proposicoes`) e série histórica oficial do Salário Mínimo (`api.bcb.gov.br` — SGS 1619).
+  - **Central de APIs Legislativas e Executivas Agrupadas (`apisAgrupadas`):**
+    1. **Senado Federal & Congresso Nacional:** `https://legis.senado.leg.br/dadosabertos/processo/{senadoId}` ([Swagger UI Oficial](https://legis.senado.leg.br/dadosabertos/api-docs/swagger-ui/index.html)) — retorna identificação bicameral, situação no Senado e norma jurídica sancionada;
+    2. **Câmara dos Deputados Federal:** `https://dadosabertos.camara.leg.br/api/v2/proposicoes/{camaraId}` ([Swagger UI Oficial](https://dadosabertos.camara.leg.br/swagger/api.html)) — retorna situação na Câmara, último despacho e ementa oficial;
+    3. **Assembleias Legislativas Estaduais (Rede SAPL/Interlegis & ALMG):** Endpoints REST abertos das Assembleias Legislativas do **Piauí (`ALEPI`)**, **Paraíba (`ALPB`)**, **Amazonas (`ALEAM`)**, **Tocantins (`ALTO`)**, **Minas Gerais (`ALMG`)** e **Acre (`ALEAC`)**, monitorando leis estaduais de transição ecológica, agricultura familiar, combate à fome, dignidade menstrual e direitos sociais;
+    4. **Banco Central do Brasil (SGS):** `https://api.bcb.gov.br/dados/serie/bcdata.sgs.1619/dados/ultimos/1?formato=json` — série histórica oficial do Salário Mínimo Nacional.
+- **Suíte Automatizada de Verificação de Veracidade (`Vitest` + `Python`):**
+  - Audita automaticamente as identidades aritméticas em **todos os 4 turnos nacionais**, **27 UFs + Exterior (`ZZ`)**, **5.570 municípios** e **18.858 zonas eleitorais**, além de recalcular e confrontar o hash `SHA-256` determinístico de cada uma das **24 propostas** e validar o contrato ao vivo nas APIs governamentais.
 - **Sem Pré-arredondamento em Disco:** As bases preservam os inteiros exatos de cada município, UF e zona eleitoral; percentuais, margens e variações são calculados em tempo de execução.
 - **Status de Propostas Protegidos:** O usuário final visualiza e filtra as propostas sem poder adulterar seus status. Qualquer atualização ocorre exclusivamente por sincronização oficial automática ou comando interno autenticado.
 - **Auditabilidade Pública (`/fontes`):** Página dedicada com todos os hashes criptográficos `SHA-256` dos arquivos brutos, endpoints consultados e fórmulas matemáticas utilizadas.
@@ -34,14 +40,14 @@ A plataforma articula cinco frentes complementares:
 
 ## 🚀 Funcionalidades Principais
 
-### 1. Monitor Popular de Propostas (`#propostas`)
-- **12 compromissos estruturantes** distribuídos em 5 eixos: *Economia e Trabalho*, *Social e Saúde*, *Educação e Ciência*, *Clima e Amazônia* e *Democracia e Soberania*.
-- Placar consolidado no topo (*Consolidadas*, *Em andamento*, *Em articulação* e *Índice geral de execução*).
+### 1. Monitor Popular de Propostas — Nacional & Estadual (`#propostas`)
+- **24 propostas e leis verificáveis** (**16 Nacionais Bicamerais** + **8 Estaduais**) distribuídas em 5 eixos: *Economia e Trabalho*, *Social e Saúde*, *Educação e Ciência*, *Clima e Amazônia* e *Democracia e Soberania*.
+- Filtro por **Escala Federativa** (*Todas as Esferas (24)*, *Nacional · Congresso, Câmara e Senado (16)* e *Estadual · Assembleias Legislativas (8)*), filtro por **Eixo Temático** e filtro por **Status**.
+- Painel expansível **Central de Dados Abertos Legislativos e Executivos (Nacional & Estadual)** exibindo os endpoints REST e links para o Swagger UI oficial do Senado, da Câmara, das Assembleias Estaduais e do BCB.
 - Cada card exibe:
-  - Estágio de execução (somente leitura para visitantes);
-  - Barra de progresso aferida;
-  - Marco verificável e órgão oficial de acompanhamento;
-  - **Código da proposição legislativa, situação ao vivo na Câmara dos Deputados e link direto para a ficha oficial de tramitação**.
+  - Esfera federativa (`Nacional · BR` ou `Estadual · UF`) e estágio de execução (somente leitura para visitantes);
+  - Barra de progresso aferida, marco verificável e ementa oficial extraída da API;
+  - **Rastreabilidade Bicameral (Câmara + Senado) ou Estadual (SAPL/ALMG), norma jurídica gerada e selo criptográfico `SHA-256` de veracidade**.
 
 ### 2. Comparativo Regional 1º × 2º Turno (`#comparativo`)
 - Alternância entre dois modos de análise:
@@ -147,13 +153,15 @@ npm run dev
 # Acesse http://localhost:3000
 ```
 
-### 2. Verificação de Qualidade e Testes Automatizados
+### 2. Verificação de Qualidade e Testes Automatizados de Veracidade
 
 ```bash
 cd web
-npm run typecheck   # Verificação estática TypeScript (tsc --noEmit)
-npm run lint        # ESLint Next.js
-npm test            # 26 testes unitários e de integridade de dados (Vitest)
+npm run typecheck         # Verificação estática TypeScript (tsc --noEmit)
+npm run lint              # ESLint Next.js
+npm test                  # 35 testes automatizados (unitários + auditoria integral de veracidade TSE/IBGE/APIs)
+npm run veracidade:check  # Auditoria criptográfica SHA-256 e aritmética local (5.570 municípios, 18.858 zonas, 24 propostas)
+npm run veracidade:live   # Auditoria completa + verificação ao vivo nas APIs da Câmara, Senado, Assembleias Estaduais e BCB
 ```
 
 ### 3. Reproduzindo o Pipeline Completo de Dados

@@ -69,6 +69,10 @@ jobs:
             python3 pipeline/03_update_propostas.py --auto
           fi
 
+      - name: Executar auditoria automatizada de veracidade (TSE, IBGE, Câmara, Senado e ALs)
+        run: |
+          python3 pipeline/04_verify_veracidade.py --live
+
       - name: Commit e Push se houver alterações nas propostas
         run: |
           git config user.name "VoVira Bot"

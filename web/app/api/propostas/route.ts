@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import fs from "node:fs";
 import path from "node:path";
 
-export const revalidate = 3600; // Revalida automaticamente a cada 1 hora na Vercel (ISR)
+export const revalidate = 3600; // Revalidação ISR a cada 1 hora na Vercel
 
 export type EixoProposta =
   | "Economia e Trabalho"
@@ -12,31 +12,52 @@ export type EixoProposta =
   | "Democracia e Soberania";
 
 export type StatusProposta = "cumprida" | "andamento" | "nao_iniciada";
+export type EsferaProposta = "nacional" | "estadual";
+
+export interface ApiAgrupada {
+  id: string;
+  nome: string;
+  esfera: string;
+  endpointBase: string;
+  docsUrl: string;
+  descricao: string;
+}
 
 export interface PropostaItem {
   id: string;
   num: string;
+  esfera?: EsferaProposta;
+  uf?: string;
+  casaLegislativa?: string;
   titulo: string;
   eixo: EixoProposta;
   status: StatusProposta;
   progresso: number;
-  regraAutomatica?: "legislativa" | "hibrida";
+  regraAutomatica?: "legislativa" | "hibrida" | "estadual_sapl" | "estadual_almg";
   progressoExecucao?: number;
   overrideManual?: boolean;
   promessa: string;
   metaIndicador: string;
   fonteAcompanhamento: string;
   camaraId?: number;
+  senadoId?: number;
   proposicaoCodigo?: string;
+  apiEstadualUrl?: string;
   urlFonte?: string;
+  urlSenado?: string;
   situacaoCamara?: string;
+  situacaoSenado?: string;
+  normaGerada?: string;
   ultimaTramitacao?: string;
   dataUltimaTramitacao?: string;
+  ementaOficial?: string;
+  sha256Verificacao?: string;
 }
 
 export interface PropostasPayload {
   atualizadoEm: string;
   metodoAtualizacao: string;
+  apisAgrupadas?: ApiAgrupada[];
   indicadoresOficiais?: {
     salarioMinimoBCB?: { data: string; valor: string };
   };
@@ -55,14 +76,21 @@ function readLocalPropostas(): PropostasPayload {
 
 function inferirStatus(
   situacao: string,
-  regra: "legislativa" | "hibrida" = "hibrida",
-  progressoExecucao?: number
+  regra: PropostaItem["regraAutomatica"] = "hibrida",
+  progressoExecucao?: number,
+  normaGerada = ""
 ): { status: StatusProposta; progresso: number } {
-  const sit = (situacao || "").toLowerCase();
+  const sit = `${situacao || ""} ${normaGerada || ""}`.toLowerCase();
   const normaJuridica =
-    sit.includes("norma jurídica") || sit.includes("promulgad") || sit.includes("sancionad");
+    sit.includes("norma jurídica") ||
+    sit.includes("lei nº") ||
+    sit.includes("lei ordinária") ||
+    sit.includes("lei complementar") ||
+    sit.includes("emenda constitucional") ||
+    sit.includes("promulgad") ||
+    sit.includes("sancionad");
 
-  if (regra === "legislativa") {
+  if (regra === "legislativa" || regra === "estadual_sapl") {
     if (normaJuridica) return { status: "cumprida", progresso: 100 };
     if (
       sit.includes("pronta para pauta") ||
@@ -76,6 +104,11 @@ function inferirStatus(
       return { status: "nao_iniciada", progresso: 35 };
     }
     return { status: "nao_iniciada", progresso: 25 };
+  }
+
+  if (regra === "estadual_almg") {
+    if (normaJuridica) return { status: "cumprida", progresso: 100 };
+    return { status: "andamento", progresso: progressoExecucao ?? 55 };
   }
 
   const prog = typeof progressoExecucao === "number" ? progressoExecucao : normaJuridica ? 90 : 50;
@@ -93,7 +126,7 @@ async function consultarCamaraAoVivo(camaraId: number): Promise<{
     const res = await fetch(`https://dadosabertos.camara.leg.br/api/v2/proposicoes/${camaraId}`, {
       headers: {
         Accept: "application/json",
-        "User-Agent": "VoVira-MonitorPropostas/1.0",
+        "User-Agent": "VoVira-VeracidadeLegislativa/2.0",
       },
       next: { revalidate: 3600 },
     });
@@ -117,27 +150,121 @@ async function consultarCamaraAoVivo(camaraId: number): Promise<{
   }
 }
 
+async function consultarSenadoAoVivo(senadoId: number): Promise<{
+  situacaoSenado: string;
+  normaGerada: string;
+} | null> {
+  try {
+    const res = await fetch(`https://legis.senado.leg.br/dadosabertos/processo/${senadoId}`, {
+      headers: {
+        Accept: "application/json",
+        "User-Agent": "VoVira-VeracidadeLegislativa/2.0",
+      },
+      next: { revalidate: 3600 },
+    });
+    if (!res.ok) return null;
+    const d = await res.json();
+    const normaRaw = d?.normaGerada;
+    const norma =
+      typeof normaRaw === "object" && normaRaw !== null
+        ? String(normaRaw.descricao || "").trim()
+        : String(normaRaw || "").trim();
+    const casa = String(d?.casaIdentificadora || "SF").trim();
+    const sitAtual = String(d?.situacaoAtual || "").trim();
+    const situacaoSenado = norma
+      ? `Sancionada / Promulgada: ${norma}`
+      : sitAtual
+      ? `${sitAtual} (${casa})`
+      : `Processo no ${casa}`;
+    return {
+      situacaoSenado,
+      normaGerada: norma,
+    };
+  } catch {
+    return null;
+  }
+}
+
+async function consultarEstadualAoVivo(
+  url: string,
+  regra: PropostaItem["regraAutomatica"]
+): Promise<{
+  situacaoCamara: string;
+  ultimaTramitacao: string;
+  dataUltimaTramitacao?: string;
+  normaGerada?: string;
+} | null> {
+  try {
+    const res = await fetch(url, {
+      headers: {
+        Accept: "application/json",
+        "User-Agent": "VoVira-VeracidadeLegislativa/2.0",
+      },
+      next: { revalidate: 3600 },
+    });
+    if (!res.ok) return null;
+    const d = await res.json();
+    if (regra === "estadual_almg" || d?.resultado) {
+      const item = d?.resultado?.listaItem?.[0];
+      if (!item) return null;
+      const ementa = String(item.ementa || "").replace(/\s+/g, " ").trim();
+      const sit = String(item.situacao || "Em tramitação na ALMG").trim();
+      return {
+        situacaoCamara: `${sit} (ALMG)`,
+        ultimaTramitacao: ementa.slice(0, 160),
+      };
+    }
+    const normaStr = String(d?.__str__ || "").trim();
+    const ementa = String(d?.ementa || "").replace(/\s+/g, " ").trim();
+    const dataPub = String(d?.data || "").slice(0, 10);
+    return {
+      situacaoCamara: "Norma Jurídica Estadual Vigente",
+      ultimaTramitacao: ementa ? ementa.slice(0, 160) : normaStr,
+      dataUltimaTramitacao: dataPub || undefined,
+      normaGerada: normaStr || undefined,
+    };
+  } catch {
+    return null;
+  }
+}
+
 export async function GET() {
   const payload = readLocalPropostas();
 
   const atualizadas = await Promise.all(
     payload.propostas.map(async (p) => {
-      if (!p.camaraId) return p;
-      const aoVivo = await consultarCamaraAoVivo(p.camaraId);
-      if (!aoVivo) return p;
+      const item: PropostaItem = { ...p };
 
-      const item: PropostaItem = {
-        ...p,
-        situacaoCamara: aoVivo.situacaoCamara,
-        ultimaTramitacao: aoVivo.ultimaTramitacao,
-        dataUltimaTramitacao: aoVivo.dataUltimaTramitacao || p.dataUltimaTramitacao,
-      };
+      if (item.esfera === "estadual" && item.apiEstadualUrl) {
+        const est = await consultarEstadualAoVivo(item.apiEstadualUrl, item.regraAutomatica);
+        if (est) {
+          item.situacaoCamara = est.situacaoCamara;
+          item.ultimaTramitacao = est.ultimaTramitacao;
+          if (est.dataUltimaTramitacao) item.dataUltimaTramitacao = est.dataUltimaTramitacao;
+          if (est.normaGerada) item.normaGerada = est.normaGerada;
+        }
+      } else {
+        const [camara, senado] = await Promise.all([
+          item.camaraId ? consultarCamaraAoVivo(item.camaraId) : Promise.resolve(null),
+          item.senadoId ? consultarSenadoAoVivo(item.senadoId) : Promise.resolve(null),
+        ]);
+        if (camara) {
+          item.situacaoCamara = camara.situacaoCamara;
+          item.ultimaTramitacao = camara.ultimaTramitacao;
+          if (camara.dataUltimaTramitacao) item.dataUltimaTramitacao = camara.dataUltimaTramitacao;
+        }
+        if (senado) {
+          item.situacaoSenado = senado.situacaoSenado;
+          if (senado.normaGerada) item.normaGerada = senado.normaGerada;
+        }
+      }
 
       if (!item.overrideManual) {
         const calc = inferirStatus(
-          aoVivo.situacaoCamara,
+          item.situacaoCamara || "",
           item.regraAutomatica ?? "hibrida",
-          item.progressoExecucao
+          item.progressoExecucao,
+          item.normaGerada || ""
         );
         item.status = calc.status;
         item.progresso = calc.progresso;
@@ -153,10 +280,6 @@ export async function GET() {
   });
 }
 
-/**
- * Endpoint interno protegido por chave (VOVIRA_ADMIN_KEY) para atualização manual via API.
- * O usuário final nunca possui acesso a este endpoint na interface.
- */
 export async function POST(req: NextRequest) {
   const adminKey = process.env.VOVIRA_ADMIN_KEY;
   const headerKey = req.headers.get("x-vovira-key");
@@ -205,8 +328,7 @@ export async function POST(req: NextRequest) {
   try {
     fs.writeFileSync(getPropostasPath(), `${JSON.stringify(payload, null, 2)}\n`, "utf-8");
   } catch {
-    // Em ambiente serverless read-only (ex.: Vercel lambda), retorna o objeto validado
-    // e orienta o uso do workflow/CLI para persistência em git.
+    // Em ambiente serverless read-only, preserva retorno validado.
   }
 
   return NextResponse.json({ ok: true, proposta: alvo, atualizadoEm: payload.atualizadoEm });
