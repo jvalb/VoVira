@@ -32,6 +32,12 @@ import urllib.request
 from typing import Any
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "pipeline"))
+try:
+    from http_util import fetch_json
+except ImportError:
+    from pipeline.http_util import fetch_json
+
 PROPOSTAS_PATH = ROOT / "web" / "public" / "data" / "propostas.json"
 
 CAMARA_API = "https://dadosabertos.camara.leg.br/api/v2/proposicoes"
@@ -790,109 +796,109 @@ def inferir_status_legislativo(
 
 def consultar_camara(camara_id: int) -> dict[str, str] | None:
     url = f"{CAMARA_API}/{camara_id}"
-    req = urllib.request.Request(url, headers=HEADERS)
+    payload = fetch_json(url, headers=HEADERS, timeout=15, retries=3, backoff_factor=1.0)
+    if not payload or not isinstance(payload, dict):
+        return None
     try:
-        with urllib.request.urlopen(req, timeout=12) as resp:
-            payload = json.loads(resp.read().decode("utf-8"))
-            dados = payload.get("dados", {})
-            st = dados.get("statusProposicao", {}) or {}
-            situacao = st.get("descricaoSituacao") or st.get("descricaoTramitacao") or "Em tramitação"
-            despacho = (st.get("despacho") or st.get("descricaoTramitacao") or "").strip()
-            if len(despacho) > 160:
-                despacho = despacho[:157].rstrip() + "..."
-            data_hora = (st.get("dataHora") or "")[:10]
-            ementa = (dados.get("ementa") or "").strip()
-            return {
-                "situacaoCamara": situacao,
-                "ultimaTramitacao": despacho or situacao,
-                "dataUltimaTramitacao": data_hora,
-                "ementaOficial": ementa,
-            }
+        dados = payload.get("dados", {})
+        st = dados.get("statusProposicao", {}) or {}
+        situacao = st.get("descricaoSituacao") or st.get("descricaoTramitacao") or "Em tramitação"
+        despacho = (st.get("despacho") or st.get("descricaoTramitacao") or "").strip()
+        if len(despacho) > 160:
+            despacho = despacho[:157].rstrip() + "..."
+        data_hora = (st.get("dataHora") or "")[:10]
+        ementa = (dados.get("ementa") or "").strip()
+        return {
+            "situacaoCamara": situacao,
+            "ultimaTramitacao": despacho or situacao,
+            "dataUltimaTramitacao": data_hora,
+            "ementaOficial": ementa,
+        }
     except Exception as exc:
-        print(f"  [aviso] Falha ao consultar Câmara ID {camara_id}: {exc}", file=sys.stderr)
+        print(f"  [aviso] Falha ao processar dados da Câmara ID {camara_id}: {exc}", file=sys.stderr)
         return None
 
 
 def consultar_senado(senado_id: int) -> dict[str, str] | None:
     url = f"{SENADO_API}/{senado_id}"
-    req = urllib.request.Request(url, headers=HEADERS)
+    payload = fetch_json(url, headers=HEADERS, timeout=15, retries=3, backoff_factor=1.0)
+    if not payload or not isinstance(payload, dict):
+        return None
     try:
-        with urllib.request.urlopen(req, timeout=12) as resp:
-            d = json.loads(resp.read().decode("utf-8"))
-            norma_raw = d.get("normaGerada")
-            if isinstance(norma_raw, dict):
-                norma = str(norma_raw.get("descricao") or "").strip()
-            else:
-                norma = str(norma_raw or "").strip()
-            ident = str(d.get("identificacao") or "").strip()
-            casa = str(d.get("casaIdentificadora") or "SF").strip()
-            situacao_atual = str(d.get("situacaoAtual") or "").strip()
-            tramitando = str(d.get("tramitando") or "")
-            if norma:
-                situacao_senado = f"Sancionada / Promulgada: {norma}"
-            elif situacao_atual:
-                situacao_senado = f"{situacao_atual} ({casa})"
-            elif tramitando == "Sim":
-                situacao_senado = f"Em tramitação ({casa})"
-            else:
-                situacao_senado = f"Processo {ident} ({casa})"
-            conteudo = d.get("conteudo")
-            ementa = str(conteudo.get("ementa") if isinstance(conteudo, dict) else d.get("ementa") or "").strip()
-            return {
-                "situacaoSenado": situacao_senado,
-                "normaGerada": norma,
-                "casaSenado": casa,
-                "ementaSenado": ementa,
-            }
+        d = payload
+        norma_raw = d.get("normaGerada")
+        if isinstance(norma_raw, dict):
+            norma = str(norma_raw.get("descricao") or "").strip()
+        else:
+            norma = str(norma_raw or "").strip()
+        ident = str(d.get("identificacao") or "").strip()
+        casa = str(d.get("casaIdentificadora") or "SF").strip()
+        situacao_atual = str(d.get("situacaoAtual") or "").strip()
+        tramitando = str(d.get("tramitando") or "")
+        if norma:
+            situacao_senado = f"Sancionada / Promulgada: {norma}"
+        elif situacao_atual:
+            situacao_senado = f"{situacao_atual} ({casa})"
+        elif tramitando == "Sim":
+            situacao_senado = f"Em tramitação ({casa})"
+        else:
+            situacao_senado = f"Processo {ident} ({casa})"
+        conteudo = d.get("conteudo")
+        ementa = str(conteudo.get("ementa") if isinstance(conteudo, dict) else d.get("ementa") or "").strip()
+        return {
+            "situacaoSenado": situacao_senado,
+            "normaGerada": norma,
+            "casaSenado": casa,
+            "ementaSenado": ementa,
+        }
     except Exception as exc:
-        print(f"  [aviso] Falha ao consultar Senado ID {senado_id}: {exc}", file=sys.stderr)
+        print(f"  [aviso] Falha ao processar dados do Senado ID {senado_id}: {exc}", file=sys.stderr)
         return None
 
 
 def consultar_api_estadual(url: str, regra: str) -> dict[str, str] | None:
-    req = urllib.request.Request(url, headers=HEADERS)
+    payload = fetch_json(url, headers=HEADERS, timeout=15, retries=3, backoff_factor=1.0)
+    if not payload or not isinstance(payload, dict):
+        return None
     try:
-        with urllib.request.urlopen(req, timeout=12) as resp:
-            d = json.loads(resp.read().decode("utf-8"))
-            if regra == "estadual_almg" or "resultado" in d:
-                lista = d.get("resultado", {}).get("listaItem", [])
-                if not lista:
-                    return None
-                item = lista[0]
-                ementa = " ".join((item.get("ementa") or "").split())
-                sit = (item.get("situacao") or "Em tramitação na ALMG").strip()
-                return {
-                    "situacaoCamara": f"{sit} (ALMG)",
-                    "ultimaTramitacao": ementa[:160],
-                    "ementaOficial": ementa,
-                    "normaGerada": "",
-                }
-            # Padrão SAPL / Interlegis (ALEPI, ALPB, ALEAM, ALTO, ALEAC)
-            norma_str = (d.get("__str__") or "").strip()
-            ementa = " ".join((d.get("ementa") or "").split())
-            data_pub = (d.get("data") or "")[:10]
+        d = payload
+        if regra == "estadual_almg" or "resultado" in d:
+            lista = d.get("resultado", {}).get("listaItem", [])
+            if not lista:
+                return None
+            item = lista[0]
+            ementa = " ".join((item.get("ementa") or "").split())
+            sit = (item.get("situacao") or "Em tramitação na ALMG").strip()
             return {
-                "situacaoCamara": "Norma Jurídica Estadual Vigente",
-                "ultimaTramitacao": ementa[:160] if ementa else norma_str,
-                "dataUltimaTramitacao": data_pub,
+                "situacaoCamara": f"{sit} (ALMG)",
+                "ultimaTramitacao": ementa[:160],
                 "ementaOficial": ementa,
-                "normaGerada": norma_str,
+                "normaGerada": "",
             }
+        # Padrão SAPL / Interlegis (ALEPI, ALPB, ALEAM, ALTO, ALEAC)
+        norma_str = (d.get("__str__") or "").strip()
+        ementa = " ".join((d.get("ementa") or "").split())
+        data_pub = (d.get("data") or "")[:10]
+        return {
+            "situacaoCamara": "Norma Jurídica Estadual Vigente",
+            "ultimaTramitacao": ementa[:160] if ementa else norma_str,
+            "dataUltimaTramitacao": data_pub,
+            "ementaOficial": ementa,
+            "normaGerada": norma_str,
+        }
     except Exception as exc:
-        print(f"  [aviso] Falha ao consultar API Estadual ({url}): {exc}", file=sys.stderr)
+        print(f"  [aviso] Falha ao processar dados da API Estadual ({url}): {exc}", file=sys.stderr)
         return None
 
 
 def consultar_salario_minimo_bcb() -> dict[str, str] | None:
-    req = urllib.request.Request(BCB_SM_API, headers=HEADERS)
-    try:
-        with urllib.request.urlopen(req, timeout=10) as resp:
-            arr = json.loads(resp.read().decode("utf-8"))
-            if arr and isinstance(arr, list):
-                ultimo = arr[-1]
-                return {"data": ultimo.get("data", ""), "valor": ultimo.get("valor", "")}
-    except Exception as exc:
-        print(f"  [aviso] Falha ao consultar BCB SGS 1619: {exc}", file=sys.stderr)
+    arr = fetch_json(BCB_SM_API, headers=HEADERS, timeout=15, retries=3, backoff_factor=1.0)
+    if arr and isinstance(arr, list):
+        try:
+            ultimo = arr[-1]
+            return {"data": ultimo.get("data", ""), "valor": ultimo.get("valor", "")}
+        except Exception as exc:
+            print(f"  [aviso] Falha ao formatar registro do BCB SGS 1619: {exc}", file=sys.stderr)
     return None
 
 

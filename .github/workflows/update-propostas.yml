@@ -50,15 +50,18 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-          cache: "pip"
-          cache-dependency-path: |
-            **/requirements*.txt
 
-      - name: Instalar dependências Python
+      - name: Instalar dependências Python (se houver)
         run: |
-          python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          if [ -f pipeline/requirements.txt ]; then pip install -r pipeline/requirements.txt; fi
+          if [ -f requirements.txt ]; then
+            python -m pip install --upgrade pip
+            pip install -r requirements.txt
+          elif [ -f pipeline/requirements.txt ]; then
+            python -m pip install --upgrade pip
+            pip install -r pipeline/requirements.txt
+          else
+            echo "Nenhuma dependência pip externa necessária (o pipeline utiliza a biblioteca padrão do Python)."
+          fi
 
       - name: Sincronizar ou aplicar atualização manual interna
         env:
@@ -79,11 +82,12 @@ jobs:
           fi
 
       - name: Executar auditoria automatizada de veracidade (TSE, IBGE, Câmara, Senado e ALs)
-        continue-on-error: true
         run: |
-          python3 pipeline/04_verify_veracidade.py --live || echo "Auditoria ao vivo retornou avisos ou encontrou indisponibilidade temporária de APIs externas."
+          python3 pipeline/04_verify_veracidade.py --live
 
       - name: Commit e Push se houver alterações nas propostas
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "VoVira Bot"
           git config user.email "actions@github.com"
@@ -91,7 +95,8 @@ jobs:
           if git diff --cached --quiet; then
             echo "Nenhuma alteração nos dados de propostas."
           else
-            git commit -m "chore(propostas): atualizar status e tramitacao das propostas monitoradas"
-            git pull --rebase origin main
-            git push origin main
+            git commit -m "chore(propostas): atualizar status e tramitacao das propostas monitoradas [skip ci]"
+            BRANCH="${GITHUB_REF_NAME:-main}"
+            git pull --rebase origin "$BRANCH" || true
+            git push origin HEAD:"$BRANCH"
           fi
