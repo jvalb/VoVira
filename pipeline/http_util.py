@@ -22,7 +22,7 @@ ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / "data" / "raw"
 CERTS = ROOT / "data" / "certs"
 
-UA = "VoVira-pipeline/0.1 (+dados publicos; contato: projeto local)"
+UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 (VoVira/2.0; +https://github.com/jvalb/VoVira)"
 
 
 def ssl_context() -> ssl.SSLContext:
@@ -72,9 +72,9 @@ def fetch_bytes(
 def fetch_json(
     url: str,
     headers: dict[str, str] | None = None,
-    timeout: int = 15,
-    retries: int = 3,
-    backoff_factor: float = 1.0,
+    timeout: int = 8,
+    retries: int = 2,
+    backoff_factor: float = 0.5,
 ) -> Any | None:
     """Requisita JSON com retries para erros transitórios (5xx, timeouts, conexões perdidas).
 

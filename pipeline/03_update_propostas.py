@@ -46,7 +46,7 @@ BCB_SM_API = "https://api.bcb.gov.br/dados/serie/bcdata.sgs.1619/dados/ultimos/1
 
 HEADERS = {
     "Accept": "application/json",
-    "User-Agent": "VoVira-VeracidadeLegislativa/2.0 (+https://github.com/jvalb/VoVira)",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 (VoVira/2.0; +https://github.com/jvalb/VoVira)",
 }
 
 APIS_AGRUPADAS = [
