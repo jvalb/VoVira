@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-11-12T18:40:20Z",
+  "atualizadoEm": "2026-11-14T16:49:44Z",
   "metodoAtualizacao": "hibrido (API Dados Abertos da Câmara + BCB SGS + curadoria interna)",
   "indicadoresOficiais": {
     "salarioMinimoBCB": {
@@ -347,8 +347,8 @@
       "situacaoCamara": "Aguardando Parecer",
       "situacaoSenado": "REMETIDA À CÂMARA DOS DEPUTADOS (SF)",
       "normaGerada": "",
-      "ultimaTramitacao": "Apensação da proposição PL 4692/2026 à proposição PL 4388/2026.",
-      "dataUltimaTramitacao": "2026-11-12",
+      "ultimaTramitacao": "Apensação da proposição PL 4302/2026 à proposição PL 1523/2026.",
+      "dataUltimaTramitacao": "2026-11-13",
       "ementaOficial": "Dispõe sobre o desenvolvimento, o fomento e o uso ético e responsável da inteligência artificial com base na centralidade da pessoa humana.",
       "sha256Verificacao": "25ea2578165f541769cccb06553cf765a8d0ca9bdd539116f38e4a973645a4a5"
     },
